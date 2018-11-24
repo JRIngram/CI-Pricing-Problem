@@ -19,7 +19,7 @@ public class Genetic {
 		this.generationLimit = generationLimit;
 	}
 	
-	public void GeneticSearch(){
+	public Tuple<double[], Double> GeneticSearch(){
 		for(int i = 0; i < generationLimit; i++) {
 			Tuple<double[], Double>[] parents = parentSelection(population);
 			Tuple[] nextGeneration = createNextGeneration(parents);
@@ -29,6 +29,7 @@ public class Genetic {
 			sortPopulation(population);
 			System.out.println("[Gen: " + (i + 1) + "] Current best route: " + population[0].getItemOne() + " with a cost of " + population[0].getItemTwo());
 		}
+		return population[0];
 	}
 	
 	/**
@@ -152,7 +153,7 @@ public class Genetic {
 			//Loop to create child one
 			for(int i = 0; i < childOne.getItemOne().length; i++){
 				int chosenParent = rng.nextInt(101);
-				if(chosenParent < 50) {
+				if(chosenParent < 60) {
 					childOne.getItemOne()[i] = bestParent.getItemOne()[i];
 				}
 				else {
