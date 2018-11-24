@@ -91,79 +91,77 @@ public class Genetic {
 		Tuple<double[], Double> childOne = new Tuple<double[], Double>(new double[numberOfGoods], 0.0);
 		Tuple<double[], Double> childTwo = new Tuple<double[], Double>(new double[numberOfGoods], 0.0);
 		Random rng = new Random();
-		String[] childOneRouteArray = new String[parentOneRouteArray.length];
-		String[] childTwoRouteArray = new String[parentTwoRouteArray.length];
 		
-		//Copy a random selection from one parent. Mask those cities in the other parent.
-		//Place the selection in a set part of the child. 
-		//Add the non-masked children from parent two in the order they are found.
-		int startOfRouteSubset = rng.nextInt(parentOneRouteArray.length - (parentOneRouteArray.length / 2));
-		String[] parentOneSubstring = new String[parentOneRouteArray.length];
-		String[] parentTwoSubstring = new String[parentTwoRouteArray.length];
-		
-		//Inserts the substrings at the appropriate locations in the two children.
-		for(int i = startOfRouteSubset; i < startOfRouteSubset + (parentOneRouteArray.length / 2); i++) {
-			childOneRouteArray[i] = parentOneRouteArray[i];
-			childTwoRouteArray[i] = parentTwoRouteArray[i];
+		//uniform crossover - with bias to better parent
+		Tuple<double[], Double> bestParent;
+		Tuple<double[], Double> worstParent;
+		boolean betterParentPresent = false; //Used to mark if one parent is better than another.
+		if(parentOne.getItemTwo() < parentTwo.getItemTwo()) {
+			bestParent = parentTwo;
+			worstParent = parentOne;
+			betterParentPresent = true;
+		}
+		else if(parentTwo.getItemTwo() < parentOne.getItemTwo()){
+			bestParent = parentOne;
+			worstParent = parentTwo;
+		}
+		else {
+			bestParent = parentOne;
+			worstParent = parentTwo;
 		}
 		
-		//Finish creating child one
-		for(int i = 0; i < parentOneRouteArray.length; i++) {
-			boolean alreadyContained = false;
-			Integer nextEmptyCell = null;
-			for(int j = 0; j < childOneRouteArray.length; j++) {
-				if(childOneRouteArray[j] == null && nextEmptyCell == null) {
-					nextEmptyCell = j;
-					break;
+		//For each index in child array, chooses whether to inherit from better parent or worst parent - with 60:40 bias toward better parent.
+		if(betterParentPresent) {
+			//Loop to create child one
+			for(int i = 0; i < childOne.getItemOne().length; i++){
+				int chosenParent = rng.nextInt(101);
+				if(chosenParent < 60) {
+					childOne.getItemOne()[i] = bestParent.getItemOne()[i];
+				}
+				else {
+					childOne.getItemOne()[i] = worstParent.getItemOne()[i];
 				}
 			}
-			for(int j = 0; j < childOneRouteArray.length; j++) {
-				if(parentTwoRouteArray[i].equals(childOneRouteArray[j])){
-					alreadyContained = true;
+			
+			//Loop to create child two
+			for(int i = 0; i < childTwo.getItemOne().length; i++){
+				int chosenParent = rng.nextInt(101);
+				if(chosenParent < 60) {
+					childTwo.getItemOne()[i] = bestParent.getItemOne()[i];
 				}
-			}
-			if(alreadyContained == false) {
-				//TODO NEED TO ADD IT IN THE NEXT EMPTY CELL NOT 'I'
-				childOneRouteArray[nextEmptyCell] = parentTwoRouteArray[i];
-			}
-		}
-		
-		//Finish creating child two
-		for(int i = 0; i < parentTwoRouteArray.length; i++) {
-			boolean alreadyContained = false;
-			Integer nextEmptyCell = null;
-			for(int j = 0; j < childTwoRouteArray.length; j++) {
-				if(childTwoRouteArray[j] == null && nextEmptyCell == null) {
-					nextEmptyCell = j;
-					break;
+				else {
+					childTwo.getItemOne()[i] = worstParent.getItemOne()[i];
 				}
-			}
-			for(int j = 0; j < childTwoRouteArray.length; j++) {
-				if(parentOneRouteArray[i].equals(childTwoRouteArray[j])){
-					alreadyContained = true;
-				}
-			}
-			if(alreadyContained == false) {
-				childTwoRouteArray[nextEmptyCell] = parentOneRouteArray[i];
 			}
 		}
 		
-		//Mutate the children
-		childOneRouteArray = mutate(childOneRouteArray, 0.7);
-		childTwoRouteArray = mutate(childTwoRouteArray, 0.7);
-		
-		//Add arrows back into route array
-		String childOneRoute = "";
-		String childTwoRoute = "";
-		for(int i = 0; i < childOneRouteArray.length; i++) {
-			if(i+1 != childOneRouteArray.length){
-				childOneRoute += childOneRouteArray[i] + "->";
-				childTwoRoute += childTwoRouteArray[i] + "->";
+		//If no better parent is present - randomly inherits from each parent for each index.
+		else {
+			//Loop to create child one
+			for(int i = 0; i < childOne.getItemOne().length; i++){
+				int chosenParent = rng.nextInt(2);
+				if(chosenParent == 0) {
+					childOne.getItemOne()[i] = bestParent.getItemOne()[i];
+				}
+				else if(chosenParent == 1) {
+					childOne.getItemOne()[i] = worstParent.getItemOne()[i];
+				}
 			}
-			else {
-				childOneRoute += childOneRouteArray[i];
-				childTwoRoute += childTwoRouteArray[i];
+			
+			//Loop to create child two
+			for(int i = 0; i < childTwo.getItemOne().length; i++){
+				int chosenParent = rng.nextInt(2);
+				if(chosenParent == 0) {
+					childTwo.getItemOne()[i] = bestParent.getItemOne()[i];
+				}
+				else if(chosenParent == 1) {
+					childTwo.getItemOne()[i] = worstParent.getItemOne()[i];
+				}
 			}
 		}
+		
+		Tuple[] children = {childOne, childTwo};
+		return children;
+	}
 
 }
