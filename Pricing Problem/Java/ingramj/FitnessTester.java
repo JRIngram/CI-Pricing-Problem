@@ -1,4 +1,8 @@
 package ingramj;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Random;
 
 import ingramj.genetic.Genetic;
@@ -11,7 +15,7 @@ import ingramj.particle.ParticleSwarm;
  */
 public class FitnessTester {
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
         int numberOfGoods = 20;
         Random rng = new Random(0);
         // We are allowed to assume that prices may be anything from 1p to �10 per item.
@@ -49,21 +53,28 @@ public class FitnessTester {
         }
         
         System.out.println("Final best revenue was " + bestRevenue);
-        //particleSwarm(f, 20);
-        Tuple[] results = new Tuple[50];
-        for(int i = 0; i < 50; i++){
-        	System.out.println("***Test " + i + "***");
-            Genetic gen = new Genetic(f, 20, 100, 1000);
-        	results[i] = gen.GeneticSearch();
+        
+
+		int numberOfTests = 25;
+        Tuple[] genResults = new Tuple[numberOfTests];
+        for(int i = 0; i < genResults.length; i++) {
+            Genetic gen = new Genetic(f, 20, 100);
+            genResults[i] = gen.timeRestrainedGeneticSearch(10);
         }
-        for(int i = 0; i < results.length; i++) {
-        	System.out.println(results[i].getItemTwo());
-        }
-    }
-    
-    public static void particleSwarm(PricingProblem problem, int numberOfGoods){
+        
+        Tuple[] psResults = new Tuple[numberOfTests];
 		double[] coefficients = {0.721, 1.1193, 1.1193};
-    	ParticleSwarm ps = new ParticleSwarm(problem, numberOfGoods, coefficients, 100);
-    	ps.searchSpace(100);
-    } 
+        for(int i = 0; i < psResults.length; i++) {
+            ParticleSwarm ps = new ParticleSwarm(f, 20, coefficients,100);
+            psResults[i] = ps.searchSpaceTimeRestrained(10);
+        }
+        System.out.println("Adding test results to file.");
+        PrintWriter writer = new PrintWriter("testResults.csv", "UTF-8");
+        writer.print("Genetic Results,Particle Results\n");
+        for(int i = 0; i< numberOfTests; i++){
+        	writer.print(genResults[i].getItemTwo()+ "," + psResults[i].getItemTwo()+"\n");
+        }
+        writer.close();
+        System.out.println("Tests completed");
+    }
 }

@@ -9,17 +9,15 @@ public class Genetic {
 	
 	private PricingProblem problem;
 	private Tuple<double[], Double>[] population;
-	private int generationLimit;
 	private int numberOfGoods;
 	
-	public Genetic(PricingProblem problem, int numberOfGoods, int populationSize, int generationLimit) {
+	public Genetic(PricingProblem problem, int numberOfGoods, int populationSize) {
 		this.problem = problem;
 		this.numberOfGoods = numberOfGoods;
 		this.population = createPopulation(populationSize, numberOfGoods);
-		this.generationLimit = generationLimit;
 	}
 	
-	public Tuple<double[], Double> GeneticSearch(){
+	public Tuple<double[], Double> geneticSearch(int generationLimit){
 		for(int i = 0; i < generationLimit; i++) {
 			Tuple<double[], Double>[] parents = parentSelection(population);
 			Tuple[] nextGeneration = createNextGeneration(parents);
@@ -31,6 +29,33 @@ public class Genetic {
 		}
 		return population[0];
 	}
+	
+	public Tuple<double[], Double> timeRestrainedGeneticSearch(int timeRestraint){
+		long start = System.currentTimeMillis();
+		long now = System.currentTimeMillis();
+		long timeDifference = (now - start) / 1000;
+		int counter = 0;
+		while(timeDifference < timeRestraint) {
+			Tuple<double[], Double>[] parents = parentSelection(population);
+			Tuple[] nextGeneration = createNextGeneration(parents);
+			//Replaces the worst chromosome from the new generation with the best from the previous.
+			now = System.currentTimeMillis();
+			timeDifference = (now - start) / 1000;
+			if(timeDifference < timeRestraint) {
+				nextGeneration[nextGeneration.length - 1] = population[0];	
+				population = nextGeneration;
+				sortPopulation(population);
+			}
+			System.out.println("[Gen: " + (counter) + "] Current best pricing: " + population[0].getItemOne() + " with a revenue of " + population[0].getItemTwo());
+			now = System.currentTimeMillis();
+			timeDifference = (now - start) / 1000;
+			counter++;
+		}
+		System.out.println("Completed in " + timeDifference + " seconds");
+		return population[0];
+	}
+	
+	
 	
 	/**
 	 * Generates a population for use in the genetic algorithm.

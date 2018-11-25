@@ -2,6 +2,7 @@ package ingramj.particle;
 
 import java.util.Arrays;
 import ingramj.PricingProblem;
+import ingramj.genetic.Tuple;
 import ingramj.particle.Particle;
 
 public class ParticleSwarm {
@@ -9,6 +10,7 @@ public class ParticleSwarm {
 	private double[] globalBestPricing;
 	private double globalBestResult;
 	private PricingProblem problem;
+	private double[] coefficients;
 	
 	/**
 	 * Creates a particle swarm of a user-defined size
@@ -19,7 +21,9 @@ public class ParticleSwarm {
 	 */
 	public ParticleSwarm(PricingProblem problem, int numberOfGoods, double[] coefficients, int size) {
 		swarm = new Particle[size];
+		this.coefficients = coefficients;
 		this.problem = problem;
+
 		
 		//Creates particle swarm
 		for(int i = 0; i < size; i++) {
@@ -34,7 +38,7 @@ public class ParticleSwarm {
 			if(globalBestResult < swarm[i].getPersonalBestResult()) {
 				globalBestPricing = swarm[i].getPersonalBestPricing();
 				globalBestResult = swarm[i].getPersonalBestResult();
-				System.out.println("[0] New Global Best " + globalBestPricing.toString() + " with a LSS of: " + globalBestResult );
+				System.out.println("[0] New Global Best " + globalBestPricing.toString() + " with a revenue of: " + globalBestResult );
 			}
 		}
 		updateSwarmsGlobalBest();
@@ -54,7 +58,7 @@ public class ParticleSwarm {
 	 * @param numberOfSearches
 	 * @return
 	 */
-	public double[] searchSpace(int numberOfSearches){
+	public Tuple<double[], Double> searchSpace(int numberOfSearches){
 		for(int i = 0; i < numberOfSearches; i++) {
 			//Each particle searches the state space
 			for(int j = 0; j < swarm.length; j++) {
@@ -69,13 +73,53 @@ public class ParticleSwarm {
 					updateSwarmsGlobalBest();
 				}
 			}
+			
 			//Calculates new velocity for all particles based on global best.
 			for(int j = 0; j < swarm.length; j++) {
 				swarm[j].calculateNewVelocity();
 			}
 		}
 		System.out.println("Finished with a global best of: " + globalBestResult);
-		return globalBestPricing;
+		Tuple bestFoundPricing = new Tuple(globalBestPricing, globalBestResult);
+		return bestFoundPricing;
+	}
+	
+	/**
+	 * Causes the particles to search the state space to find the best position
+	 * @param numberOfSearches
+	 * @return
+	 */
+	public Tuple<double[], Double> searchSpaceTimeRestrained(int timeRestraint){
+		long start = System.currentTimeMillis();
+		long now = System.currentTimeMillis();
+		long timeDifference = (now - start) / 1000;
+		int counter = 0;
+		while(timeDifference < timeRestraint) {
+			//Each particle searches the state space
+			for(int j = 0; j < swarm.length; j++) {
+				swarm[j].searchSpace();
+			}
+			//Checks all particles and updates the global best
+			for(int j = 0; j < swarm.length; j++){
+				if(globalBestResult < swarm[j].getPersonalBestResult()  && problem.is_valid(swarm[j].getPersonalBestPricing())) {
+					globalBestPricing = Arrays.copyOf(swarm[j].getPersonalBestPricing(), swarm[j].getPersonalBestPricing().length);
+					globalBestResult = swarm[j].getPersonalBestResult();
+					System.out.println("[" + counter + "] New Global Best " + globalBestPricing.toString() + " with a revenue of: " + globalBestResult );
+					updateSwarmsGlobalBest();
+				}
+			}
+			
+			//Calculates new velocity for all particles based on global best.
+			for(int j = 0; j < swarm.length; j++) {
+				swarm[j].calculateNewVelocity();
+			}
+			counter++;
+			now = System.currentTimeMillis();
+			timeDifference = (now - start) / 1000;
+		}
+		System.out.println("Finished with a global best of: " + globalBestResult);
+		Tuple bestFoundPricing = new Tuple(globalBestPricing, globalBestResult);
+		return bestFoundPricing;
 	}
 	
 }

@@ -155,5 +155,4 @@ public class Particle {
 		this.globalBestPricing = pricing;
 		this.globalBestResult = result;
 	}
-	
 }
