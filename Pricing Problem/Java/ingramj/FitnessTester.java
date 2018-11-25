@@ -54,8 +54,7 @@ public class FitnessTester {
         
         System.out.println("Final best revenue was " + bestRevenue);
         
-
-		int numberOfTests = 25;
+		int numberOfTests = 250;
         Tuple[] genResults = new Tuple[numberOfTests];
         for(int i = 0; i < genResults.length; i++) {
             Genetic gen = new Genetic(f, 20, 100);

@@ -104,7 +104,7 @@ public class ParticleSwarm {
 				if(globalBestResult < swarm[j].getPersonalBestResult()  && problem.is_valid(swarm[j].getPersonalBestPricing())) {
 					globalBestPricing = Arrays.copyOf(swarm[j].getPersonalBestPricing(), swarm[j].getPersonalBestPricing().length);
 					globalBestResult = swarm[j].getPersonalBestResult();
-					System.out.println("[" + counter + "] New Global Best " + globalBestPricing.toString() + " with a revenue of: " + globalBestResult );
+					System.out.println("[" + counter + "] New Global Best with a revenue of: " + globalBestResult );
 					updateSwarmsGlobalBest();
 				}
 			}

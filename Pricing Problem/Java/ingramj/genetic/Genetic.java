@@ -1,6 +1,7 @@
 package ingramj.genetic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import ingramj.PricingProblem;
@@ -46,7 +47,7 @@ public class Genetic {
 				population = nextGeneration;
 				sortPopulation(population);
 			}
-			System.out.println("[Gen: " + (counter) + "] Current best pricing: " + population[0].getItemOne() + " with a revenue of " + population[0].getItemTwo());
+			System.out.println("[Gen: " + (counter) + "] Current best pricing has a revenue of " + population[0].getItemTwo());
 			now = System.currentTimeMillis();
 			timeDifference = (now - start) / 1000;
 			counter++;
