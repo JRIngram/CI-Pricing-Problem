@@ -36,6 +36,8 @@ public class FitnessTester {
         System.out.println("[7] Exit.");
         int runningMode = input.nextInt();
         input.nextLine();
+		int numberOfTests = 100;
+		int secondsToRun = 10;
         switch(runningMode) {
         	case 1:
         		randomSearch(f,20);
@@ -99,10 +101,95 @@ public class FitnessTester {
         		//pso
         		break;
         	case 4:
-        		//gen tests
+        		System.out.println("This will run a series of tests for genetic algorithms.");
+        		System.out.println("These tests will check the results of biases and population sizes on gentic algorithms");
+        		System.out.println("Each test will run 100 times, for 10 seconds.");
+        		System.out.println("\t* A run of 10 seconds, with a 60:40 bias (bestParent:worstParent), population of 50");
+        		System.out.println("\t* A run of 10 seconds, with a 40:60 bias (worstParent:bestParent), population of 50");
+        		System.out.println("\t* A run of 10 seconds, with no bias to either parent, population of 50");
+        		System.out.println("\t* A run of 10 seconds, with a 60:40 bias (bestParent:worstParent), population of 100");
+        		System.out.println("\t* A run of 10 seconds, with a 40:60 bias (worstParent:bestParent), population of 100");
+        		System.out.println("\t* A run of 10 seconds, with no bias to either parent, population of 100");
+        		System.out.println("\t* A run of 10 seconds, with a 60:40 bias (bestParent:worstParent), population of 250");
+        		System.out.println("\t* A run of 10 seconds, with a 40:60 bias (worstParent:bestParent), population of 250");
+        		System.out.println("\t* A run of 10 seconds, with no bias to either parent, population of 250");
+        		System.out.println("\t* A run of 10 seconds, with a 60:40 bias (bestParent:worstParent), population of 500");
+        		System.out.println("\t* A run of 10 seconds, with a 40:60 bias (worstParent:bestParent), population of 500");
+        		System.out.println("\t* A run of 10 seconds, with no bias to either parent, population of 500");
+        		System.out.println("This will take approximately " + (12 * (secondsToRun * numberOfTests)) + " seconds to run.");
+        		System.out.println("Press any key to begin...");
+        		input.nextLine();
+        		
+        		//Result arrays for populations of 50
+        		double[] biasToBestPop50Results = new double[numberOfTests];
+        		double[] biasToWorstPop50Results = new double[numberOfTests];
+        		double[] noBiasPop50Results = new double[numberOfTests];
+        		
+        		//Result arrays for populations of 100
+        		double[] biasToBestPop100Results = new double[numberOfTests];
+        		double[] biasToWorstPop100Results = new double[numberOfTests];
+        		double[] noBiasPop100Results = new double[numberOfTests];
+        		
+        		//Result arrays for populations of 250
+        		double[] biasToBestPop250Results = new double[numberOfTests];
+        		double[] biasToWorstPop250Results = new double[numberOfTests];
+        		double[] noBiasPop250Results = new double[numberOfTests];
+
+        		//Result arrays for populations of 500
+        		double[] biasToBestPop500Results = new double[numberOfTests];
+        		double[] biasToWorstPop500Results = new double[numberOfTests];
+        		double[] noBiasPop500Results = new double[numberOfTests];
+        		
+        		//Runs tests for a specified number of times, for each configuration.
+        		for(int i = 0; i < numberOfTests; i++){
+        			//Run tests for populations of 50
+        			Genetic biasToBestPop50 = new Genetic(f, 20, 50, 60);
+        			biasToBestPop50Results[i] = biasToBestPop50.timeRestrainedGeneticSearch(secondsToRun).getItemTwo();
+        			Genetic biasToWorstPop50 = new Genetic(f, 20, 50, 40);
+        			biasToWorstPop50Results[i] = biasToWorstPop50.timeRestrainedGeneticSearch(secondsToRun).getItemTwo();
+        			Genetic noBiasPop50 = new Genetic(f, 20, 50, 50);
+        			noBiasPop50Results[i] = noBiasPop50.timeRestrainedGeneticSearch(secondsToRun).getItemTwo();
+            		
+        			//Run tests for populations of 100
+        			Genetic biasToBestPop100 = new Genetic(f, 20, 100, 60);
+        			biasToBestPop100Results[i] = biasToBestPop100.timeRestrainedGeneticSearch(secondsToRun).getItemTwo();
+        			Genetic biasToWorstPop100 = new Genetic(f, 20, 100, 40);
+        			biasToWorstPop100Results[i] = biasToWorstPop100.timeRestrainedGeneticSearch(secondsToRun).getItemTwo();
+        			Genetic noBiasPop100 = new Genetic(f, 20, 100, 50);
+            		noBiasPop100Results[i] = noBiasPop100.timeRestrainedGeneticSearch(secondsToRun).getItemTwo();
+            		
+        			//Run tests for populations of 250
+        			Genetic biasToBestPop250 = new Genetic(f, 20, 250, 60);
+            		biasToBestPop250Results[i] = biasToBestPop250.timeRestrainedGeneticSearch(secondsToRun).getItemTwo();
+        			Genetic biasToWorstPop250 = new Genetic(f, 20, 250, 40);
+            		biasToWorstPop250Results[i] = biasToWorstPop250.timeRestrainedGeneticSearch(secondsToRun).getItemTwo();
+        			Genetic noBiasPop250 = new Genetic(f, 20, 250, 50);
+            		noBiasPop250Results[i] = noBiasPop250.timeRestrainedGeneticSearch(secondsToRun).getItemTwo();
+            		
+        			//Run tests for populations of 500
+        			Genetic biasToBestPop500 = new Genetic(f, 20, 500, 60);
+            		biasToBestPop500Results[i] = biasToBestPop500.timeRestrainedGeneticSearch(secondsToRun).getItemTwo();
+            		Genetic biasToWorstPop500 = new Genetic(f, 20, 500, 40);
+            		biasToWorstPop500Results[i] = biasToWorstPop500.timeRestrainedGeneticSearch(secondsToRun).getItemTwo();
+        			Genetic noBiasPop500 = new Genetic(f, 20, 500, 50);
+            		noBiasPop500Results[i] = noBiasPop500.timeRestrainedGeneticSearch(secondsToRun).getItemTwo();	
+        		}
+        		PrintWriter writer = new PrintWriter("GA_Test_Results.csv", "UTF-8");
+        		writer.print("Genetic Results (60:40) Pop 50,Genetic Results (40:60) Pop 50,Genetic Results (50:50) Pop 50," +
+        				"Genetic Results (60:40) Pop 100,Genetic Results (40:60) Pop 100,Genetic Results (50:50) Pop 100," +
+        				"Genetic Results (60:40) Pop 250,Genetic Results (40:60) Pop 250,Genetic Results (50:50) Pop 250," +
+        				"Genetic Results (60:40) Pop 500,Genetic Results (40:60) Pop 500,Genetic Results (50:50) Pop 500\n");
+        		for(int i = 0; i < numberOfTests; i++) {
+              		writer.print(biasToBestPop50Results[i] + "," + biasToWorstPop50Results[i] + "," + noBiasPop50Results[i]   + "," +
+              				biasToBestPop100Results[i] + "," + biasToWorstPop100Results[i] + "," + noBiasPop100Results[i]   + "," +
+              				biasToBestPop250Results[i] + "," + biasToWorstPop250Results[i] + "," + noBiasPop250Results[i]   + "," +
+              				biasToBestPop500Results[i] + "," + biasToWorstPop500Results[i] + "," + noBiasPop500Results[i] + "\n");
+        		}
+                writer.close();
+                System.out.println("Genetic Tests completed!");
         		break;
         	case 5:
-        		//PSO tests
+
         		break;
         	
         	case 6:
@@ -113,9 +200,8 @@ public class FitnessTester {
         		break;
         }
         
-        
+        /*
         //Performs a random search - existing code was moved to a new method.
-        randomSearch(f, 20);
         
 		int numberOfTests = 1;
 		int secondsToRun = 10;
@@ -162,7 +248,7 @@ public class FitnessTester {
         	 resultString += "* " + bestResult.getItemOne()[i] + "\n";
         }
         System.out.print("Best priciing found is:\n" + resultString + "\nWith a revenue of: " + bestResult.getItemTwo());
-        
+        */
     }
     
     public static void randomSearch(PricingProblem f, int numberOfGoods){
