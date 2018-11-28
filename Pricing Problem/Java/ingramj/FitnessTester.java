@@ -2,8 +2,8 @@ package ingramj;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.Random;
+import java.util.Scanner;
 
 import ingramj.genetic.Genetic;
 import ingramj.genetic.Tuple;
@@ -16,43 +16,53 @@ import ingramj.particle.ParticleSwarm;
 public class FitnessTester {
     
     public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
+        System.out.println("Starting CI-Pricing Problem...");
         int numberOfGoods = 20;
         Random rng = new Random(0);
+        Scanner input = new Scanner(System.in);
         // We are allowed to assume that prices may be anything from 1p to �10 per item.
         
         PricingProblem f = PricingProblem.courseworkInstance();
+        
         //PricingProblem f = PricingProblem.randomInstance(20);
-        
-        double[] prices = new double[numberOfGoods];
-        double[] newPrices = new double[numberOfGoods];
-        
-        // Generate some random prices, keep the best, see what happens
-        for (int i = 0; i < numberOfGoods; i++) {
-            prices[i] = rng.nextDouble() * 10;
+        System.out.println("\n*****CI-Pricing Problem...*****");
+        System.out.println("Which mode would you like to run CI-Pricing Problem in? (Enter the number): ");
+        System.out.println("[1] Random Search for 100 iterations.");
+        System.out.println("[2] Genetic Search.");
+        System.out.println("[3] Particle Swarm Optimisation (PSO).");
+        System.out.println("[4] Genetic Tests (allows multiple configs, runs, and prints result to file).");
+        System.out.println("[5] PSO Tests (allows multiple configs, runs, and prints result to file).");
+        System.out.println("[6] Comparison Tests (runs PSO and Genetic multiple times, and prints result to file).");
+        System.out.println("[7] Exit.");
+        int runningMode = input.nextInt();
+        switch(runningMode) {
+        	case 1:
+        		randomSearch(f,20);
+        		break;
+        	case 2:
+        		//genetic
+        		break;
+        	case 3:
+        		//pso
+        		break;
+        	case 4:
+        		//gen tests
+        		break;
+        	case 5: 
+        		//PSO tests
+        		break;
+        	
+        	case 6:
+        		//comparisons
+        		break;
+        	case 7:
+        		System.exit(0);
+        		break;
         }
-        double bestRevenue = f.evaluate(prices);
-        double newRevenue = 0.0;
         
-        for (int iteration = 0; iteration < 100; iteration++) {
         
-            //System.out.println("Best revenue so far is " + bestRevenue);
-            
-            // Generate more!
-            for (int i = 0; i < numberOfGoods; i++) {
-                newPrices[i] = rng.nextDouble() * 10;
-            }
-        
-            newRevenue = f.evaluate(newPrices);
-            if (newRevenue > bestRevenue) {
-                for (int i = 0; i < prices.length; i++) {
-                    prices[i] = newPrices[i];
-                }
-                bestRevenue = newRevenue;
-            }
-            
-        }
-        
-        System.out.println("Final best revenue was " + bestRevenue);
+        //Performs a random search - existing code was moved to a new method.
+        randomSearch(f, 20);
         
 		int numberOfTests = 1;
 		int secondsToRun = 10;
@@ -100,5 +110,39 @@ public class FitnessTester {
         }
         System.out.print("Best priciing found is:\n" + resultString + "\nWith a revenue of: " + bestResult.getItemTwo());
         
+    }
+    
+    public static void randomSearch(PricingProblem f, int numberOfGoods){
+        Random rng = new Random(0);
+        double[] prices = new double[numberOfGoods];
+        double[] newPrices = new double[numberOfGoods];
+        
+        // Generate some random prices, keep the best, see what happens
+        for (int i = 0; i < numberOfGoods; i++) {
+            prices[i] = rng.nextDouble() * 10;
+        }
+        double bestRevenue = f.evaluate(prices);
+        double newRevenue = 0.0;
+        
+        for (int iteration = 0; iteration < 100; iteration++) {
+        
+            //System.out.println("Best revenue so far is " + bestRevenue);
+            
+            // Generate more!
+            for (int i = 0; i < numberOfGoods; i++) {
+                newPrices[i] = rng.nextDouble() * 10;
+            }
+        
+            newRevenue = f.evaluate(newPrices);
+            if (newRevenue > bestRevenue) {
+                for (int i = 0; i < prices.length; i++) {
+                    prices[i] = newPrices[i];
+                }
+                bestRevenue = newRevenue;
+            }
+            
+        }
+        
+        System.out.println("Final best revenue was " + bestRevenue);
     }
 }
