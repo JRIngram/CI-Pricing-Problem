@@ -11,11 +11,13 @@ public class Genetic {
 	private PricingProblem problem;
 	private Tuple<double[], Double>[] population;
 	private int numberOfGoods;
+	private int biasToBest;
 	
-	public Genetic(PricingProblem problem, int numberOfGoods, int populationSize) {
+	public Genetic(PricingProblem problem, int numberOfGoods, int populationSize, int biasToBest) {
 		this.problem = problem;
 		this.numberOfGoods = numberOfGoods;
 		this.population = createPopulation(populationSize, numberOfGoods);
+		this.biasToBest = biasToBest;
 	}
 	
 	public Tuple<double[], Double> geneticSearch(int generationLimit){
@@ -23,10 +25,10 @@ public class Genetic {
 			Tuple<double[], Double>[] parents = parentSelection(population);
 			Tuple[] nextGeneration = createNextGeneration(parents);
 			//Replaces the worst chromosome from the new generation with the best from the previous. 
-			nextGeneration[nextGeneration.length - 1] = population[0];	
+			nextGeneration[nextGeneration.length - 1] = population[0];
 			population = nextGeneration;
 			sortPopulation(population);
-			System.out.println("[Gen: " + (i + 1) + "] Current best route: " + population[0].getItemOne() + " with a cost of " + population[0].getItemTwo());
+			System.out.println("[Gen: " + (i) + "] Current best pricing has a revenue of " + population[0].getItemTwo());
 		}
 		return population[0];
 	}
@@ -174,12 +176,12 @@ public class Genetic {
 			worstParent = parentTwo;
 		}
 		
-		//For each index in child array, chooses whether to inherit from better parent or worst parent - with 60:40 bias toward better parent.
+		//For each index in child array, chooses whether to inherit from better parent or worst parent - with bias toward better parent, defined by the user.
 		if(betterParentPresent) {
 			//Loop to create child one
 			for(int i = 0; i < childOne.getItemOne().length; i++){
 				int chosenParent = rng.nextInt(101);
-				if(chosenParent < 60) {
+				if(chosenParent < biasToBest) {
 					childOne.getItemOne()[i] = bestParent.getItemOne()[i];
 				}
 				else {

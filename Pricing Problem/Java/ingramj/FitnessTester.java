@@ -54,14 +54,13 @@ public class FitnessTester {
         
         System.out.println("Final best revenue was " + bestRevenue);
         
-		int numberOfTests = 250;
+		int numberOfTests = 10;
 		int secondsToRun = 10;
         Tuple<double[], Double>[] genResults = new Tuple[numberOfTests];
         for(int i = 0; i < genResults.length; i++) {
-            Genetic gen = new Genetic(f, 20, 100);
+            Genetic gen = new Genetic(f, 20, 100, 60);
             genResults[i] = gen.timeRestrainedGeneticSearch(secondsToRun);
         }
-        
         Tuple<double[], Double>[] psResults = new Tuple[numberOfTests];
 		double[] coefficients = {0.721, 1.1193, 1.1193};
         for(int i = 0; i < psResults.length; i++) {
