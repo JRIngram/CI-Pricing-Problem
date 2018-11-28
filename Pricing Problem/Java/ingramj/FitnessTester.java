@@ -54,17 +54,18 @@ public class FitnessTester {
         
         System.out.println("Final best revenue was " + bestRevenue);
         
-		int numberOfTests = 250;
+		int numberOfTests = 1;
 		int secondsToRun = 10;
         Tuple<double[], Double>[] genResults = new Tuple[numberOfTests];
         for(int i = 0; i < genResults.length; i++) {
             Genetic gen = new Genetic(f, 20, 100, 60);
             genResults[i] = gen.timeRestrainedGeneticSearch(secondsToRun);
         }
+        
         Tuple<double[], Double>[] psResults = new Tuple[numberOfTests];
 		double[] coefficients = {(1 / (2 * Math.log(2))), (0.5 + Math.log(2)), (0.5 + Math.log(2))};
         for(int i = 0; i < psResults.length; i++) {
-            ParticleSwarm ps = new ParticleSwarm(f, 20, coefficients,100);
+            ParticleSwarm ps = new ParticleSwarm(f, 20, coefficients,100, 0);
             psResults[i] = ps.searchSpaceTimeRestrained(secondsToRun);
         }
         System.out.println("Tests completed!");

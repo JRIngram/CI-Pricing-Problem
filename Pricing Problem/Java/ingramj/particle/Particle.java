@@ -155,4 +155,10 @@ public class Particle {
 		this.globalBestPricing = pricing;
 		this.globalBestResult = result;
 	}
+	
+	public void updateCoefficients(double[] updatedCoefficients) {
+		intertiaCoefficient = updatedCoefficients[0];
+		cognitiveCoefficient = updatedCoefficients[1];
+		socialCoefficient = updatedCoefficients[2];
+	}
 }

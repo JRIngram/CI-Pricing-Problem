@@ -11,6 +11,7 @@ public class ParticleSwarm {
 	private double globalBestResult;
 	private PricingProblem problem;
 	private double[] coefficients;
+	private int adaptiveSetting;
 	
 	/**
 	 * Creates a particle swarm of a user-defined size
@@ -18,16 +19,32 @@ public class ParticleSwarm {
 	 * @param antennaNumber The number of antennae
 	 * @param coefficients The coefficients for calculating the particle's new positions.
 	 * @param size The size of the particle swarms
+	 * @param adaptiveSetting Sets which adaptive mode will be used. 0: coefficients are equal; 1: bias to exploration; 2: initial bias to exploitation; 3: initial bias to exploration then bias switches to exploitation; 4: initial bias to exploitation then bias switches to exploration. 
 	 */
-	public ParticleSwarm(PricingProblem problem, int numberOfGoods, double[] coefficients, int size) {
+	public ParticleSwarm(PricingProblem problem, int numberOfGoods, double[] coefficients, int size, int adaptiveSetting) {
+		//Settings the adaptivity setting to default if not a valid value.
+		if(adaptiveSetting < 0 || adaptiveSetting > 4) {
+			adaptiveSetting = 0;
+		}
+		this.adaptiveSetting = adaptiveSetting;
+		this.coefficients = Arrays.copyOf(coefficients, coefficients.length);
+		if(adaptiveSetting != 0) {
+			if(adaptiveSetting == 1 || adaptiveSetting == 3){
+				this.coefficients[1] = this.coefficients[1] * 1.1;
+				this.coefficients[2] = this.coefficients[2] * 0.9;
+			}
+			else if(adaptiveSetting == 2 || adaptiveSetting == 4){
+				this.coefficients[1] = this.coefficients[1] * 0.9;
+				this.coefficients[2] = this.coefficients[2] * 1.1;
+			}
+		}
 		swarm = new Particle[size];
-		this.coefficients = coefficients;
 		this.problem = problem;
 
 		
 		//Creates particle swarm
 		for(int i = 0; i < size; i++) {
-			swarm[i] = new Particle(numberOfGoods, problem, coefficients);
+			swarm[i] = new Particle(numberOfGoods, problem, this.coefficients);
 		}
 		
 		globalBestPricing = swarm[0].getPersonalBestPricing();
@@ -59,7 +76,7 @@ public class ParticleSwarm {
 	 * @return
 	 */
 	public Tuple<double[], Double> searchSpace(int numberOfSearches){
-		for(int i = 0; i < numberOfSearches; i++) {
+		for(int i = 0; i < numberOfSearches; i++) {			
 			//Each particle searches the state space
 			for(int j = 0; j < swarm.length; j++) {
 				swarm[j].searchSpace();
@@ -71,6 +88,16 @@ public class ParticleSwarm {
 					globalBestResult = swarm[j].getPersonalBestResult();
 					System.out.println("[" + i + "] New Global Best with a revenue of: " + globalBestResult );
 					updateSwarmsGlobalBest();
+				}
+			}
+			
+			//If adaptiveSetting is set to be adaptive, cognitive and coefficients are swapped once the search is half completed.
+			if(i >= (numberOfSearches / 2) && (adaptiveSetting == 3 || adaptiveSetting == 4)){
+				double temp = coefficients[1];
+				coefficients[1] = coefficients[2];
+				coefficients[2] = temp;
+				for(int j = 0; j < swarm.length; j++) {
+					swarm[j].updateCoefficients(coefficients);
 				}
 			}
 			
@@ -106,6 +133,18 @@ public class ParticleSwarm {
 					globalBestResult = swarm[j].getPersonalBestResult();
 					System.out.println("[" + counter + "] New Global Best with a revenue of: " + globalBestResult );
 					updateSwarmsGlobalBest();
+				}
+			}
+			
+			now = System.currentTimeMillis();
+			timeDifference = (now - start) / 1000;
+			//If adaptiveSetting is set to be adaptive, cognitive and coefficients are swapped once the search is half completed.
+			if(timeDifference >= (timeRestraint / 2) && (adaptiveSetting == 3 || adaptiveSetting == 4)){
+				double temp = coefficients[1];
+				coefficients[1] = coefficients[2];
+				coefficients[2] = temp;
+				for(int j = 0; j < swarm.length; j++) {
+					swarm[j].updateCoefficients(coefficients);
 				}
 			}
 			
