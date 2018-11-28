@@ -35,12 +35,65 @@ public class FitnessTester {
         System.out.println("[6] Comparison Tests (runs PSO and Genetic multiple times, and prints result to file).");
         System.out.println("[7] Exit.");
         int runningMode = input.nextInt();
+        input.nextLine();
         switch(runningMode) {
         	case 1:
         		randomSearch(f,20);
         		break;
         	case 2:
-        		//genetic
+        		System.out.println("Genetic Algorithm selected.");
+        		System.out.print("Enter population size: ");
+        		int popSize = 100;
+        		try{
+            		popSize= input.nextInt();
+            		input.nextLine();
+        		}
+        		catch(Exception e) {
+        			System.out.println("Invalid input. Default population size of 100 used.");
+        			System.out.println(e.toString());
+        		}
+        		System.out.println("Would you like a percentage to inherit from the best parent (e.g. 60 = 60 percent change to inherit from best parent)? [Y/N]");
+            	String confirmBias = input.nextLine();
+            	confirmBias = confirmBias.toUpperCase();
+            	int biasRate = 50;
+            	if(confirmBias.equals("Y")) {
+            		System.out.print("Enter bias (as whole number, e.g. 60 for 60%): ");
+            		try {
+                		biasRate =  input.nextInt();
+                		input.nextLine();
+                		while(biasRate < 0 || biasRate > 100) {
+                			System.out.println("Please enter a valid bias rate (between 0 - 100)");
+                			biasRate =  input.nextInt(); 
+                    		input.nextLine();
+                		}
+                		System.out.println("Bias of " + biasRate + " selected.");
+            		}
+            		catch(Exception e) {
+            			System.out.println("Error on input, default bias of 50 chosen");
+            		}
+            	}
+            	else {
+            		System.out.println("No bias selected.");
+            	}
+            	System.out.println("How many seconds would you like the algorithm to run for?");
+            	int runTime = 10; //Default run time of 10 seconds
+        		try {
+            		runTime =  input.nextInt();
+            		input.nextLine();
+            		while(runTime <= 0) {
+            			System.out.println("Please enter a valid run time of more than 0.");
+                		runTime =  input.nextInt();
+                		input.nextLine();
+            		}
+            		System.out.println("Run time of " + runTime + " selected.");
+        		}
+        		catch(Exception e) {
+        			runTime = 10;
+        			System.out.println("Error on input, default run time of " + runTime + " selected.");
+        		}
+            	System.out.print("Running Genetic Algorithm");
+                Genetic gen = new Genetic(f, 20, popSize, biasRate);
+                gen.timeRestrainedGeneticSearch(runTime);
         		break;
         	case 3:
         		//pso
@@ -48,7 +101,7 @@ public class FitnessTester {
         	case 4:
         		//gen tests
         		break;
-        	case 5: 
+        	case 5:
         		//PSO tests
         		break;
         	
