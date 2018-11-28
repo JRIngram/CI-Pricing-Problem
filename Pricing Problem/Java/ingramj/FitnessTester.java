@@ -55,25 +55,50 @@ public class FitnessTester {
         System.out.println("Final best revenue was " + bestRevenue);
         
 		int numberOfTests = 250;
-        Tuple[] genResults = new Tuple[numberOfTests];
+		int secondsToRun = 10;
+        Tuple<double[], Double>[] genResults = new Tuple[numberOfTests];
         for(int i = 0; i < genResults.length; i++) {
             Genetic gen = new Genetic(f, 20, 100);
-            genResults[i] = gen.timeRestrainedGeneticSearch(10);
+            genResults[i] = gen.timeRestrainedGeneticSearch(secondsToRun);
         }
         
-        Tuple[] psResults = new Tuple[numberOfTests];
+        Tuple<double[], Double>[] psResults = new Tuple[numberOfTests];
 		double[] coefficients = {0.721, 1.1193, 1.1193};
         for(int i = 0; i < psResults.length; i++) {
             ParticleSwarm ps = new ParticleSwarm(f, 20, coefficients,100);
-            psResults[i] = ps.searchSpaceTimeRestrained(10);
+            psResults[i] = ps.searchSpaceTimeRestrained(secondsToRun);
         }
-        System.out.println("Adding test results to file.");
+        System.out.println("Tests completed!");
+        System.out.println("Adding test results to file...");
+        
+        //Prints test results to a file.
         PrintWriter writer = new PrintWriter("testResults.csv", "UTF-8");
         writer.print("Genetic Results,Particle Results\n");
         for(int i = 0; i< numberOfTests; i++){
         	writer.print(genResults[i].getItemTwo()+ "," + psResults[i].getItemTwo()+"\n");
         }
         writer.close();
-        System.out.println("Tests completed");
+        System.out.println("Completed adding results to file!");
+        System.out.println("Finding best result...");
+    	Tuple<double[], Double> bestResult = genResults[0];
+    	
+    	//Finds the best result.
+        for(int i = 0; i < numberOfTests; i++) {
+        	if(bestResult.getItemTwo() <  genResults[i].getItemTwo() || bestResult.getItemTwo() < genResults[i].getItemTwo()){
+        		if(genResults[i].getItemTwo() < psResults[i].getItemTwo()){
+        			bestResult = psResults[i];
+        		}
+        		else {
+        			bestResult = genResults[i];
+        		}
+        	}
+        }
+        //Lists pricings of the best result.
+        String resultString = "";
+        for(int i = 0 ; i < bestResult.getItemOne().length; i++){
+        	 resultString += "* " + bestResult.getItemOne()[i] + "\n";
+        }
+        System.out.print("Best priciing found is:\n" + resultString + "\nWith a revenue of: " + bestResult.getItemTwo());
+        
     }
 }
