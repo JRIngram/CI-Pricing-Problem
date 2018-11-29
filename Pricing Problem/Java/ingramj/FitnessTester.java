@@ -1,4 +1,4 @@
-package ingramj;
+﻿package ingramj;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -333,7 +333,7 @@ public class FitnessTester {
     		//Comparisons
         	case 6:
         	{
-        		int numberOfComparisonTests = 100; //Number of tests ran per algorithm when running comparison tests.
+        		int numberOfComparisonTests = 1000; //Number of tests ran per algorithm when running comparison tests.
         		System.out.println("Comparison Tests Select...");
         		System.out.println("This will run:\n"+
         				"\t* A genetic algorithm with a 60% bias to inherit from the better parent during crossover, with a population size of 50.\n" +
