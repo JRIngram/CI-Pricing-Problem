@@ -36,13 +36,17 @@ public class FitnessTester {
         System.out.println("[7] Exit.");
         int runningMode = input.nextInt();
         input.nextLine();
-		int numberOfTests = 100;
+        
+		int numberOfGAAndPSOTests = 100; //Number of tests when just running the PSO or GA tests 
 		int secondsToRun = 10;
         switch(runningMode) {
         	case 1:
+        	{
         		randomSearch(f,20);
         		break;
+        	}
         	case 2:
+        	{
         		System.out.println("Genetic Algorithm selected.");
         		System.out.print("Enter population size: ");
         		int popSize = 100;
@@ -97,16 +101,19 @@ public class FitnessTester {
                 Genetic gen = new Genetic(f, 20, popSize, biasRate);
                 gen.timeRestrainedGeneticSearch(runTime);
         		break;
+        	}
         	case 3:
+        	{
         		//pso
         		break;
-        		
+        	}
         	//Genetic algorithm tests
         	case 4:
+        	{
         		System.out.println("Genetic Tests selected...");
         		System.out.println("This will run a series of tests for genetic algorithms.");
         		System.out.println("These tests will check the results of biases and population sizes on gentic algorithms");
-        		System.out.println("Each test will run 100 times, for 10 seconds.");
+        		System.out.println("Each test will run for 10 seconds 100 times.");
         		System.out.println("\t* A run of 10 seconds, with a 60:40 bias (bestParent:worstParent), population of 50");
         		System.out.println("\t* A run of 10 seconds, with a 40:60 bias (worstParent:bestParent), population of 50");
         		System.out.println("\t* A run of 10 seconds, with no bias to either parent, population of 50");
@@ -119,32 +126,32 @@ public class FitnessTester {
         		System.out.println("\t* A run of 10 seconds, with a 60:40 bias (bestParent:worstParent), population of 500");
         		System.out.println("\t* A run of 10 seconds, with a 40:60 bias (worstParent:bestParent), population of 500");
         		System.out.println("\t* A run of 10 seconds, with no bias to either parent, population of 500");
-        		System.out.println("This will take approximately " + (12 * (secondsToRun * numberOfTests)) + " seconds to run.");
+        		System.out.println("This will take approximately " + (12 * (secondsToRun * numberOfGAAndPSOTests)) + " seconds to run.");
         		System.out.println("Press any key to begin...");
         		input.nextLine();
         		
         		//Result arrays for populations of 50
-        		double[] biasToBestPop50Results = new double[numberOfTests];
-        		double[] biasToWorstPop50Results = new double[numberOfTests];
-        		double[] noBiasPop50Results = new double[numberOfTests];
+        		double[] biasToBestPop50Results = new double[numberOfGAAndPSOTests];
+        		double[] biasToWorstPop50Results = new double[numberOfGAAndPSOTests];
+        		double[] noBiasPop50Results = new double[numberOfGAAndPSOTests];
         		
         		//Result arrays for populations of 100
-        		double[] biasToBestPop100Results = new double[numberOfTests];
-        		double[] biasToWorstPop100Results = new double[numberOfTests];
-        		double[] noBiasPop100Results = new double[numberOfTests];
+        		double[] biasToBestPop100Results = new double[numberOfGAAndPSOTests];
+        		double[] biasToWorstPop100Results = new double[numberOfGAAndPSOTests];
+        		double[] noBiasPop100Results = new double[numberOfGAAndPSOTests];
         		
         		//Result arrays for populations of 250
-        		double[] biasToBestPop250Results = new double[numberOfTests];
-        		double[] biasToWorstPop250Results = new double[numberOfTests];
-        		double[] noBiasPop250Results = new double[numberOfTests];
+        		double[] biasToBestPop250Results = new double[numberOfGAAndPSOTests];
+        		double[] biasToWorstPop250Results = new double[numberOfGAAndPSOTests];
+        		double[] noBiasPop250Results = new double[numberOfGAAndPSOTests];
 
         		//Result arrays for populations of 500
-        		double[] biasToBestPop500Results = new double[numberOfTests];
-        		double[] biasToWorstPop500Results = new double[numberOfTests];
-        		double[] noBiasPop500Results = new double[numberOfTests];
+        		double[] biasToBestPop500Results = new double[numberOfGAAndPSOTests];
+        		double[] biasToWorstPop500Results = new double[numberOfGAAndPSOTests];
+        		double[] noBiasPop500Results = new double[numberOfGAAndPSOTests];
         		
         		//Runs tests for a specified number of times, for each configuration.
-        		for(int i = 0; i < numberOfTests; i++){
+        		for(int i = 0; i < numberOfGAAndPSOTests; i++){
         			//Run tests for populations of 50
         			Genetic biasToBestPop50 = new Genetic(f, 20, 50, 60);
         			biasToBestPop50Results[i] = biasToBestPop50.timeRestrainedGeneticSearch(secondsToRun).getItemTwo();
@@ -182,7 +189,7 @@ public class FitnessTester {
         				"Genetic Results (60:40) Pop 100,Genetic Results (40:60) Pop 100,Genetic Results (50:50) Pop 100," +
         				"Genetic Results (60:40) Pop 250,Genetic Results (40:60) Pop 250,Genetic Results (50:50) Pop 250," +
         				"Genetic Results (60:40) Pop 500,Genetic Results (40:60) Pop 500,Genetic Results (50:50) Pop 500\n");
-        		for(int i = 0; i < numberOfTests; i++) {
+        		for(int i = 0; i < numberOfGAAndPSOTests; i++) {
               		gaWriter.print(biasToBestPop50Results[i] + "," + biasToWorstPop50Results[i] + "," + noBiasPop50Results[i]   + "," +
               				biasToBestPop100Results[i] + "," + biasToWorstPop100Results[i] + "," + noBiasPop100Results[i]   + "," +
               				biasToBestPop250Results[i] + "," + biasToWorstPop250Results[i] + "," + noBiasPop250Results[i]   + "," +
@@ -191,11 +198,14 @@ public class FitnessTester {
                 gaWriter.close();
                 System.out.println("Genetic Tests completed!");
         		break;
+        	}
         	//PSO Tests
         	case 5:
+        	{
+        		System.out.println("PSO Tests Selected...");
         		System.out.println("This will run a series of tests for particle swarm optimisation algorithms.");
         		System.out.println("These tests will check the results of biases for coefficients and swarm sizes for particle swarm");
-        		System.out.println("Each test will run 100 times, for 10 seconds.");
+        		System.out.println("Each test will run for 10 seconds 100 times.");
         		System.out.println("Exploration can be defined as: more likely to follow personal best rather than the swarm's best");
         		System.out.println("Exploitation can be defined as: more likely to follow swarm's best");
         		//Populations of 50
@@ -222,40 +232,40 @@ public class FitnessTester {
         		System.out.println("\t* A run of 10 seconds, with a bias toward exploitation over exploration, i.e. higher social coefficient, population of 500");
         		System.out.println("\t* A run of 10 seconds, with an 'adaptive coeefficent'. This begins initially with a higher cognitive coefficient and then changes for a higher social coefficient, population of 500");
         		System.out.println("\t* A run of 10 seconds, with an 'adaptive coeefficent'. This begins initially with a higher social coefficient and then changes for a higher cognitive coefficient, population of 500");
-        		System.out.println("This will take approximately " + (20 * (secondsToRun * numberOfTests)) + " seconds to run.");
+        		System.out.println("This will take approximately " + (20 * (secondsToRun * numberOfGAAndPSOTests)) + " seconds to run.");
         		System.out.println("Press any key to begin...");
         		input.nextLine();
         		
         		double[] coefficients = {(1 / (2 * Math.log(2))), (0.5 + Math.log(2)), (0.5 + Math.log(2))};
     			//Results for populations of 50
-        		double[]noBias50Results = new double[numberOfTests];
-    			double[]exploreBias50Results = new double[numberOfTests];
-    			double[]exploitBias50Results = new double[numberOfTests];
-    			double[]adaptiveExploreBias50Results = new double[numberOfTests];
-    			double[]adaptiveExploitBias50Results = new double[numberOfTests];
+        		double[]noBias50Results = new double[numberOfGAAndPSOTests];
+    			double[]exploreBias50Results = new double[numberOfGAAndPSOTests];
+    			double[]exploitBias50Results = new double[numberOfGAAndPSOTests];
+    			double[]adaptiveExploreBias50Results = new double[numberOfGAAndPSOTests];
+    			double[]adaptiveExploitBias50Results = new double[numberOfGAAndPSOTests];
     			
     			//Results for populations of 100
-    			double[]noBias100Results = new double[numberOfTests];
-    			double[]exploreBias100Results = new double[numberOfTests];
-    			double[]exploitBias100Results = new double[numberOfTests];
-    			double[]adaptiveExploreBias100Results = new double[numberOfTests];
-    			double[]adaptiveExploitBias100Results = new double[numberOfTests];
+    			double[]noBias100Results = new double[numberOfGAAndPSOTests];
+    			double[]exploreBias100Results = new double[numberOfGAAndPSOTests];
+    			double[]exploitBias100Results = new double[numberOfGAAndPSOTests];
+    			double[]adaptiveExploreBias100Results = new double[numberOfGAAndPSOTests];
+    			double[]adaptiveExploitBias100Results = new double[numberOfGAAndPSOTests];
     			
     			//Results for populations of 250
-    			double[]noBias250Results = new double[numberOfTests];
-    			double[]exploreBias250Results = new double[numberOfTests];
-    			double[]exploitBias250Results = new double[numberOfTests];
-    			double[]adaptiveExploreBias250Results = new double[numberOfTests];
-    			double[]adaptiveExploitBias250Results = new double[numberOfTests];
+    			double[]noBias250Results = new double[numberOfGAAndPSOTests];
+    			double[]exploreBias250Results = new double[numberOfGAAndPSOTests];
+    			double[]exploitBias250Results = new double[numberOfGAAndPSOTests];
+    			double[]adaptiveExploreBias250Results = new double[numberOfGAAndPSOTests];
+    			double[]adaptiveExploitBias250Results = new double[numberOfGAAndPSOTests];
     			
     			//Results for populations of 500
-    			double[]noBias500Results = new double[numberOfTests];
-    			double[]exploreBias500Results = new double[numberOfTests];
-    			double[]exploitBias500Results = new double[numberOfTests];
-    			double[]adaptiveExploreBias500Results = new double[numberOfTests];
-    			double[]adaptiveExploitBias500Results = new double[numberOfTests];
+    			double[]noBias500Results = new double[numberOfGAAndPSOTests];
+    			double[]exploreBias500Results = new double[numberOfGAAndPSOTests];
+    			double[]exploitBias500Results = new double[numberOfGAAndPSOTests];
+    			double[]adaptiveExploreBias500Results = new double[numberOfGAAndPSOTests];
+    			double[]adaptiveExploitBias500Results = new double[numberOfGAAndPSOTests];
     			
-        		for(int i = 0; i < numberOfTests; i++){
+        		for(int i = 0; i < numberOfGAAndPSOTests; i++){
         			//Populations of 50
         			ParticleSwarm noBias50 = new ParticleSwarm(f, numberOfGoods, coefficients, 50, 0);
         			noBias50Results[i] = noBias50.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
@@ -309,7 +319,7 @@ public class FitnessTester {
         				"No Bias (Population 100), Explore Bias (Population 100), Exploit Bias (Population 100), Adaptive Bias (Initial Explore Bias) Bias (Population 100), Adaptive Bias (Initial Exploit Bias) Bias (Population 100)," +
         				"No Bias (Population 250), Explore Bias (Population 250), Exploit Bias (Population 250), Adaptive Bias (Initial Explore Bias) Bias (Population 250), Adaptive Bias (Initial Exploit Bias) Bias (Population 250)," +
         				"No Bias (Population 500), Explore Bias (Population 500), Exploit Bias (Population 500), Adaptive Bias (Initial Explore Bias) Bias (Population 500), Adaptive Bias (Initial Exploit Bias) Bias (Population 500)\n");
-        		for(int i = 0; i < numberOfTests; i++) {
+        		for(int i = 0; i < numberOfGAAndPSOTests; i++) {
         			psoWriter.print(noBias50Results[i] + "," + exploreBias50Results[i] + "," + exploitBias50Results[i] + "," + adaptiveExploreBias50Results[i] + "," + adaptiveExploitBias50Results[i] + "," + 
         					noBias100Results[i] + "," + exploreBias100Results[i] + "," + exploitBias100Results[i] + "," + adaptiveExploreBias100Results[i] + "," + adaptiveExploitBias100Results[i] + "," + 
         					noBias250Results[i] + "," + exploreBias250Results[i] + "," + exploitBias250Results[i] + "," + adaptiveExploreBias250Results[i] + "," + adaptiveExploitBias250Results[i] + "," + 
@@ -319,10 +329,63 @@ public class FitnessTester {
                 System.out.println("PSO completed!");
 
         		break;
-        	
+        	}
+    		//Comparisons
         	case 6:
-        		//comparisons
+        	{
+        		int numberOfComparisonTests = 3; //Number of tests ran per algorithm when running comparison tests.
+        		System.out.println("Comparison Tests Select...");
+        		System.out.println("This will run:\n"+
+        				"\t* A genetic algorithm with a 60% bias to inherit from the better parent during crossover, with a population size of 50.\n" +
+        				"\t* A particle swarm optimisation with adaptive coefficients. The initial bias is attraction to the swarm's best, and then swaps to personal best, with a swarm size of 500");
+        		System.out.println("Each test will run for 10 seconds 1000 times.");
+        		System.out.println("This will take approximately " + (20 * (secondsToRun * numberOfComparisonTests)) + "seconds to run.");
+        		double[] coefficients = {(1 / (2 * Math.log(2))), (0.5 + Math.log(2)), (0.5 + Math.log(2))};
+        		Tuple<double[], Double>[] gaResults = new Tuple[numberOfComparisonTests];
+        		Tuple<double[], Double>[] psoResults = new Tuple[numberOfComparisonTests];
+        		for(int i = 0; i < numberOfComparisonTests; i++) {
+        			//Runs a genetic algorithm with a population, and a 60% chance of inheriting from the best parent during crossover.
+        			Genetic gen = new Genetic(f, numberOfGoods, 50,60);
+        			gaResults[i] = gen.timeRestrainedGeneticSearch(10);
+        			ParticleSwarm pso = new ParticleSwarm(f, numberOfGoods, coefficients, 500, 4);
+        			psoResults[i] = pso.searchSpaceTimeRestrained(secondsToRun);
+        		}
+        		System.out.println("Comparison tests completed!");
+        		System.out.println("Writing results to file...");
+        		PrintWriter comparisonWriter = new PrintWriter("Comparison_Test_Results.csv", "UTF-8");
+        		comparisonWriter.print("Genetic 60% bias to parent (Population 50) , PSO Adaptive with Initial Exploit Bias (Population 500)\n");
+        		for(int i = 0; i < numberOfComparisonTests; i++) {
+        			comparisonWriter.write(gaResults[i].getItemTwo() + "," + psoResults[i].getItemTwo() + "\n"); 
+        		}
+        		comparisonWriter.close();
+        		System.out.println("File Writing Complete!");
+        		System.out.println("Finding best result...");
+        		Tuple<double[], Double> bestResult = gaResults[0];
+        		boolean geneticBest = true;
+        	    for(int i = 0; i < numberOfComparisonTests; i++){
+        	    	 //Marks which algorithm produced the best result.
+        	    	if(bestResult.getItemTwo() < gaResults[i].getItemTwo()) {
+        	    		geneticBest = true;
+        	    		bestResult = gaResults[i];
+        	    	}
+        	    	if(bestResult.getItemTwo() < psoResults[i].getItemTwo()) {
+        	    		geneticBest = false;
+        	    		bestResult = psoResults[i];
+        	    	}
+        	    }
+                String resultString = "";
+                for(int i = 0 ; i < bestResult.getItemOne().length; i++){
+                	 resultString += "* " + bestResult.getItemOne()[i] + "\n";
+                }
+                if(geneticBest) {
+                    System.out.print("Best pricing was found by the Genetic Algorithm:\n" + resultString + "\nWith a revenue of: " + bestResult.getItemTwo());
+                }
+                else{
+                	System.out.print("Best pricing was found by the Particle Swarm Optimisation:\n" + resultString + "\nWith a revenue of: " + bestResult.getItemTwo());
+                }
+        		
         		break;
+        	}
         	case 7:
         		System.exit(0);
         		break;
