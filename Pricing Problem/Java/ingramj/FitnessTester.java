@@ -100,7 +100,10 @@ public class FitnessTester {
         	case 3:
         		//pso
         		break;
+        		
+        	//Genetic algorithm tests
         	case 4:
+        		System.out.println("Genetic Tests selected...");
         		System.out.println("This will run a series of tests for genetic algorithms.");
         		System.out.println("These tests will check the results of biases and population sizes on gentic algorithms");
         		System.out.println("Each test will run 100 times, for 10 seconds.");
@@ -174,21 +177,146 @@ public class FitnessTester {
         			Genetic noBiasPop500 = new Genetic(f, 20, 500, 50);
             		noBiasPop500Results[i] = noBiasPop500.timeRestrainedGeneticSearch(secondsToRun).getItemTwo();	
         		}
-        		PrintWriter writer = new PrintWriter("GA_Test_Results.csv", "UTF-8");
-        		writer.print("Genetic Results (60:40) Pop 50,Genetic Results (40:60) Pop 50,Genetic Results (50:50) Pop 50," +
+        		PrintWriter gaWriter = new PrintWriter("GA_Test_Results.csv", "UTF-8");
+        		gaWriter.print("Genetic Results (60:40) Pop 50,Genetic Results (40:60) Pop 50,Genetic Results (50:50) Pop 50," +
         				"Genetic Results (60:40) Pop 100,Genetic Results (40:60) Pop 100,Genetic Results (50:50) Pop 100," +
         				"Genetic Results (60:40) Pop 250,Genetic Results (40:60) Pop 250,Genetic Results (50:50) Pop 250," +
         				"Genetic Results (60:40) Pop 500,Genetic Results (40:60) Pop 500,Genetic Results (50:50) Pop 500\n");
         		for(int i = 0; i < numberOfTests; i++) {
-              		writer.print(biasToBestPop50Results[i] + "," + biasToWorstPop50Results[i] + "," + noBiasPop50Results[i]   + "," +
+              		gaWriter.print(biasToBestPop50Results[i] + "," + biasToWorstPop50Results[i] + "," + noBiasPop50Results[i]   + "," +
               				biasToBestPop100Results[i] + "," + biasToWorstPop100Results[i] + "," + noBiasPop100Results[i]   + "," +
               				biasToBestPop250Results[i] + "," + biasToWorstPop250Results[i] + "," + noBiasPop250Results[i]   + "," +
               				biasToBestPop500Results[i] + "," + biasToWorstPop500Results[i] + "," + noBiasPop500Results[i] + "\n");
         		}
-                writer.close();
+                gaWriter.close();
                 System.out.println("Genetic Tests completed!");
         		break;
+        	//PSO Tests
         	case 5:
+        		System.out.println("This will run a series of tests for particle swarm optimisation algorithms.");
+        		System.out.println("These tests will check the results of biases for coefficients and swarm sizes for particle swarm");
+        		System.out.println("Each test will run 100 times, for 10 seconds.");
+        		System.out.println("Exploration can be defined as: more likely to follow personal best rather than the swarm's best");
+        		System.out.println("Exploitation can be defined as: more likely to follow swarm's best");
+        		//Populations of 50
+        		System.out.println("\t* A run of 10 seconds, with no bias toward exploration or exploitation , population of 50");
+        		System.out.println("\t* A run of 10 seconds, with a bias toward exploration over exploitation, i.e. higher cognitive coefficient, population of 50");
+        		System.out.println("\t* A run of 10 seconds, with a bias toward exploitation over exploration, i.e. higher social coefficient, population of 50");
+        		System.out.println("\t* A run of 10 seconds, with an 'adaptive coeefficent'. This begins initially with a higher cognitive coefficient and then changes for a higher social coefficient, population of 50");
+        		System.out.println("\t* A run of 10 seconds, with an 'adaptive coeefficent'. This begins initially with a higher social coefficient and then changes for a higher cognitive coefficient, population of 50");
+        		//Populations of 100
+        		System.out.println("\t* A run of 10 seconds, with no bias toward exploration or exploitation , population of 100");
+        		System.out.println("\t* A run of 10 seconds, with a bias toward exploration over exploitation, i.e. higher cognitive coefficient, population of 100");
+        		System.out.println("\t* A run of 10 seconds, with a bias toward exploitation over exploration, i.e. higher social coefficient, population of 100");
+        		System.out.println("\t* A run of 10 seconds, with an 'adaptive coeefficent'. This begins initially with a higher cognitive coefficient and then changes for a higher social coefficient, population of 100");
+        		System.out.println("\t* A run of 10 seconds, with an 'adaptive coeefficent'. This begins initially with a higher social coefficient and then changes for a higher cognitive coefficient, population of 100");
+        		//Populations of 250
+        		System.out.println("\t* A run of 10 seconds, with no bias toward exploration or exploitation , population of 250");
+        		System.out.println("\t* A run of 10 seconds, with a bias toward exploration over exploitation, i.e. higher cognitive coefficient, population of 250");
+        		System.out.println("\t* A run of 10 seconds, with a bias toward exploitation over exploration, i.e. higher social coefficient, population of 250");
+        		System.out.println("\t* A run of 10 seconds, with an 'adaptive coeefficent'. This begins initially with a higher cognitive coefficient and then changes for a higher social coefficient, population of 250");
+        		System.out.println("\t* A run of 10 seconds, with an 'adaptive coeefficent'. This begins initially with a higher social coefficient and then changes for a higher cognitive coefficient, population of 250");
+        		//Populations of 500
+        		System.out.println("\t* A run of 10 seconds, with no bias toward exploration or exploitation , population of 500");
+        		System.out.println("\t* A run of 10 seconds, with a bias toward exploration over exploitation, i.e. higher cognitive coefficient, population of 500");
+        		System.out.println("\t* A run of 10 seconds, with a bias toward exploitation over exploration, i.e. higher social coefficient, population of 500");
+        		System.out.println("\t* A run of 10 seconds, with an 'adaptive coeefficent'. This begins initially with a higher cognitive coefficient and then changes for a higher social coefficient, population of 500");
+        		System.out.println("\t* A run of 10 seconds, with an 'adaptive coeefficent'. This begins initially with a higher social coefficient and then changes for a higher cognitive coefficient, population of 500");
+        		System.out.println("This will take approximately " + (20 * (secondsToRun * numberOfTests)) + " seconds to run.");
+        		System.out.println("Press any key to begin...");
+        		input.nextLine();
+        		
+        		double[] coefficients = {(1 / (2 * Math.log(2))), (0.5 + Math.log(2)), (0.5 + Math.log(2))};
+    			//Results for populations of 50
+        		double[]noBias50Results = new double[numberOfTests];
+    			double[]exploreBias50Results = new double[numberOfTests];
+    			double[]exploitBias50Results = new double[numberOfTests];
+    			double[]adaptiveExploreBias50Results = new double[numberOfTests];
+    			double[]adaptiveExploitBias50Results = new double[numberOfTests];
+    			
+    			//Results for populations of 100
+    			double[]noBias100Results = new double[numberOfTests];
+    			double[]exploreBias100Results = new double[numberOfTests];
+    			double[]exploitBias100Results = new double[numberOfTests];
+    			double[]adaptiveExploreBias100Results = new double[numberOfTests];
+    			double[]adaptiveExploitBias100Results = new double[numberOfTests];
+    			
+    			//Results for populations of 250
+    			double[]noBias250Results = new double[numberOfTests];
+    			double[]exploreBias250Results = new double[numberOfTests];
+    			double[]exploitBias250Results = new double[numberOfTests];
+    			double[]adaptiveExploreBias250Results = new double[numberOfTests];
+    			double[]adaptiveExploitBias250Results = new double[numberOfTests];
+    			
+    			//Results for populations of 500
+    			double[]noBias500Results = new double[numberOfTests];
+    			double[]exploreBias500Results = new double[numberOfTests];
+    			double[]exploitBias500Results = new double[numberOfTests];
+    			double[]adaptiveExploreBias500Results = new double[numberOfTests];
+    			double[]adaptiveExploitBias500Results = new double[numberOfTests];
+    			
+        		for(int i = 0; i < numberOfTests; i++){
+        			//Populations of 50
+        			ParticleSwarm noBias50 = new ParticleSwarm(f, numberOfGoods, coefficients, 50, 0);
+        			noBias50Results[i] = noBias50.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
+        			ParticleSwarm exploreBias50 = new ParticleSwarm(f, numberOfGoods, coefficients, 50, 1);
+        			exploreBias50Results[i] = exploreBias50.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
+        			ParticleSwarm exploitBias50 = new ParticleSwarm(f, numberOfGoods, coefficients, 50, 2);
+        			exploitBias50Results[i] = exploitBias50.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
+        			ParticleSwarm adaptiveExploreBias50 = new ParticleSwarm(f, numberOfGoods, coefficients, 50, 3);
+        			adaptiveExploreBias50Results[i] = adaptiveExploreBias50.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
+        			ParticleSwarm adaptiveExploitBias50 = new ParticleSwarm(f, numberOfGoods, coefficients, 50, 4);
+        			adaptiveExploitBias50Results[i] = adaptiveExploitBias50.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
+        			
+        			//Populations of 100
+        			ParticleSwarm noBias100 = new ParticleSwarm(f, numberOfGoods, coefficients, 100, 0);
+        			noBias100Results[i] = noBias100.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
+        			ParticleSwarm exploreBias100 = new ParticleSwarm(f, numberOfGoods, coefficients, 100, 1);
+        			exploreBias100Results[i] = exploreBias100.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
+        			ParticleSwarm exploitBias100 = new ParticleSwarm(f, numberOfGoods, coefficients, 100, 2);
+        			exploitBias100Results[i] = exploitBias100.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
+        			ParticleSwarm adaptiveExploreBias100 = new ParticleSwarm(f, numberOfGoods, coefficients, 100, 3);
+        			adaptiveExploreBias100Results[i] = adaptiveExploreBias100.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
+        			ParticleSwarm adaptiveExploitBias100 = new ParticleSwarm(f, numberOfGoods, coefficients, 100, 4);
+        			adaptiveExploitBias100Results[i] = adaptiveExploitBias100.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
+        			
+        			//Populations of 250
+        			ParticleSwarm noBias250 = new ParticleSwarm(f, numberOfGoods, coefficients, 250, 0);
+        			noBias250Results[i] = noBias250.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
+        			ParticleSwarm exploreBias250 = new ParticleSwarm(f, numberOfGoods, coefficients, 250, 1);
+        			exploreBias250Results[i] = exploreBias250.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
+        			ParticleSwarm exploitBias250 = new ParticleSwarm(f, numberOfGoods, coefficients, 250, 2);
+        			exploitBias250Results[i] = exploitBias250.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
+        			ParticleSwarm adaptiveExploreBias250 = new ParticleSwarm(f, numberOfGoods, coefficients, 250, 3);
+        			adaptiveExploreBias250Results[i] = adaptiveExploreBias250.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
+        			ParticleSwarm adaptiveExploitBias250 = new ParticleSwarm(f, numberOfGoods, coefficients, 250, 4);
+        			adaptiveExploitBias100Results[i] = adaptiveExploitBias250.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
+        			
+        			//Populations of 500
+        			ParticleSwarm noBias500 = new ParticleSwarm(f, numberOfGoods, coefficients, 500, 0);
+        			noBias500Results[i] = noBias500.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
+        			ParticleSwarm exploreBias500 = new ParticleSwarm(f, numberOfGoods, coefficients, 500, 1);
+        			exploreBias500Results[i] = exploreBias500.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
+        			ParticleSwarm exploitBias500 = new ParticleSwarm(f, numberOfGoods, coefficients, 500, 2);
+        			exploitBias500Results[i] = exploitBias500.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
+        			ParticleSwarm adaptiveExploreBias500 = new ParticleSwarm(f, numberOfGoods, coefficients, 500, 3);
+        			adaptiveExploreBias500Results[i] = adaptiveExploreBias500.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
+        			ParticleSwarm adaptiveExploitBias500 = new ParticleSwarm(f, numberOfGoods, coefficients, 500, 4);
+        			adaptiveExploitBias500Results[i] = adaptiveExploitBias500.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
+        		}
+        		PrintWriter psoWriter = new PrintWriter("PSO_Test_Results.csv", "UTF-8");
+        		psoWriter.print("No Bias (Population 50), Explore Bias (Population 50),Exploit Bias (Population 50),Adaptive Bias (Initial Explore Bias) Bias (Population 50), Adaptive Bias (Initial Exploit Bias) Bias (Population 50)," +
+        				"No Bias (Population 100), Explore Bias (Population 100), Exploit Bias (Population 100), Adaptive Bias (Initial Explore Bias) Bias (Population 100), Adaptive Bias (Initial Exploit Bias) Bias (Population 100)," +
+        				"No Bias (Population 250), Explore Bias (Population 250), Exploit Bias (Population 250), Adaptive Bias (Initial Explore Bias) Bias (Population 250), Adaptive Bias (Initial Exploit Bias) Bias (Population 250)," +
+        				"No Bias (Population 500), Explore Bias (Population 500), Exploit Bias (Population 500), Adaptive Bias (Initial Explore Bias) Bias (Population 500), Adaptive Bias (Initial Exploit Bias) Bias (Population 500)\n");
+        		for(int i = 0; i < numberOfTests; i++) {
+        			psoWriter.print(noBias50Results[i] + "," + exploreBias50Results[i] + "," + exploitBias50Results[i] + "," + adaptiveExploreBias50Results[i] + "," + adaptiveExploitBias50Results[i] + "," + 
+        					noBias100Results[i] + "," + exploreBias100Results[i] + "," + exploitBias100Results[i] + "," + adaptiveExploreBias100Results[i] + "," + adaptiveExploitBias100Results[i] + "," + 
+        					noBias250Results[i] + "," + exploreBias250Results[i] + "," + exploitBias250Results[i] + "," + adaptiveExploreBias250Results[i] + "," + adaptiveExploitBias250Results[i] + "," + 
+        					noBias500Results[i] + "," + exploreBias500Results[i] + "," + exploitBias500Results[i] + "," + adaptiveExploreBias500Results[i] + "," + adaptiveExploitBias500Results[i] + "\n");
+        		}
+                psoWriter.close();
+                System.out.println("PSO completed!");
 
         		break;
         	
