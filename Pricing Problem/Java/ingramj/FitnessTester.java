@@ -339,7 +339,9 @@ public class FitnessTester {
         				"\t* A genetic algorithm with a 60% bias to inherit from the better parent during crossover, with a population size of 50.\n" +
         				"\t* A particle swarm optimisation with adaptive coefficients. The initial bias is attraction to the swarm's best, and then swaps to personal best, with a swarm size of 500");
         		System.out.println("Each test will run for 10 seconds 1000 times.");
-        		System.out.println("This will take approximately " + (20 * (secondsToRun * numberOfComparisonTests)) + "seconds to run.");
+        		System.out.println("This will take approximately " + (20 * (secondsToRun * numberOfComparisonTests)) + " seconds to run.");
+				System.out.println("Press any key to begin...");
+        		input.nextLine();
         		double[] coefficients = {(1 / (2 * Math.log(2))), (0.5 + Math.log(2)), (0.5 + Math.log(2))};
         		Tuple<double[], Double>[] gaResults = new Tuple[numberOfComparisonTests];
         		Tuple<double[], Double>[] psoResults = new Tuple[numberOfComparisonTests];
@@ -391,55 +393,6 @@ public class FitnessTester {
         		break;
         }
         
-        /*
-        //Performs a random search - existing code was moved to a new method.
-        
-		int numberOfTests = 1;
-		int secondsToRun = 10;
-        Tuple<double[], Double>[] genResults = new Tuple[numberOfTests];
-        for(int i = 0; i < genResults.length; i++) {
-            Genetic gen = new Genetic(f, 20, 100, 60);
-            genResults[i] = gen.timeRestrainedGeneticSearch(secondsToRun);
-        }
-        
-        Tuple<double[], Double>[] psResults = new Tuple[numberOfTests];
-		double[] coefficients = {(1 / (2 * Math.log(2))), (0.5 + Math.log(2)), (0.5 + Math.log(2))};
-        for(int i = 0; i < psResults.length; i++) {
-            ParticleSwarm ps = new ParticleSwarm(f, 20, coefficients,100, 0);
-            psResults[i] = ps.searchSpaceTimeRestrained(secondsToRun);
-        }
-        System.out.println("Tests completed!");
-        System.out.println("Adding test results to file...");
-        
-        //Prints test results to a file.
-        PrintWriter writer = new PrintWriter("testResults.csv", "UTF-8");
-        writer.print("Genetic Results,Particle Results\n");
-        for(int i = 0; i< numberOfTests; i++){
-        	writer.print(genResults[i].getItemTwo()+ "," + psResults[i].getItemTwo()+"\n");
-        }
-        writer.close();
-        System.out.println("Completed adding results to file!");
-        System.out.println("Finding best result...");
-    	Tuple<double[], Double> bestResult = genResults[0];
-    	
-    	//Finds the best result.
-        for(int i = 0; i < numberOfTests; i++) {
-        	if(bestResult.getItemTwo() <  genResults[i].getItemTwo() || bestResult.getItemTwo() < genResults[i].getItemTwo()){
-        		if(genResults[i].getItemTwo() < psResults[i].getItemTwo()){
-        			bestResult = psResults[i];
-        		}
-        		else {
-        			bestResult = genResults[i];
-        		}
-        	}
-        }
-        //Lists pricings of the best result.
-        String resultString = "";
-        for(int i = 0 ; i < bestResult.getItemOne().length; i++){
-        	 resultString += "* " + bestResult.getItemOne()[i] + "\n";
-        }
-        System.out.print("Best priciing found is:\n" + resultString + "\nWith a revenue of: " + bestResult.getItemTwo());
-        */
     }
     
     public static void randomSearch(PricingProblem f, int numberOfGoods){
