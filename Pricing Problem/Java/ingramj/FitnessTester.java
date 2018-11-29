@@ -333,7 +333,7 @@ public class FitnessTester {
     		//Comparisons
         	case 6:
         	{
-        		int numberOfComparisonTests = 3; //Number of tests ran per algorithm when running comparison tests.
+        		int numberOfComparisonTests = 100; //Number of tests ran per algorithm when running comparison tests.
         		System.out.println("Comparison Tests Select...");
         		System.out.println("This will run:\n"+
         				"\t* A genetic algorithm with a 60% bias to inherit from the better parent during crossover, with a population size of 50.\n" +
@@ -378,10 +378,10 @@ public class FitnessTester {
                 	 resultString += "* " + bestResult.getItemOne()[i] + "\n";
                 }
                 if(geneticBest) {
-                    System.out.print("Best pricing was found by the Genetic Algorithm:\n" + resultString + "\nWith a revenue of: " + bestResult.getItemTwo());
+                    System.out.print("Best pricing was found by the Genetic Algorithm:\n" + resultString + "\nWith a revenue of: " + bestResult.getItemTwo() + "\n");
                 }
                 else{
-                	System.out.print("Best pricing was found by the Particle Swarm Optimisation:\n" + resultString + "\nWith a revenue of: " + bestResult.getItemTwo());
+                	System.out.print("Best pricing was found by the Particle Swarm Optimisation:\n" + resultString + "\nWith a revenue of: " + bestResult.getItemTwo() + "\n");
                 }
         		
         		break;
