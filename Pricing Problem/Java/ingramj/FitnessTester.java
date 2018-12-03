@@ -300,7 +300,7 @@ public class FitnessTester {
         			ParticleSwarm adaptiveExploreBias250 = new ParticleSwarm(f, numberOfGoods, coefficients, 250, 3);
         			adaptiveExploreBias250Results[i] = adaptiveExploreBias250.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
         			ParticleSwarm adaptiveExploitBias250 = new ParticleSwarm(f, numberOfGoods, coefficients, 250, 4);
-        			adaptiveExploitBias100Results[i] = adaptiveExploitBias250.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
+        			adaptiveExploitBias250Results[i] = adaptiveExploitBias250.searchSpaceTimeRestrained(secondsToRun).getItemTwo();
         			
         			//Populations of 500
         			ParticleSwarm noBias500 = new ParticleSwarm(f, numberOfGoods, coefficients, 500, 0);
