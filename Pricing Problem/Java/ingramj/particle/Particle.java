@@ -8,12 +8,13 @@ public class Particle {
 	private double[] velocity;
 	private double[] position;
 	
-	private double[] personalBestPricing;
-	private double personalBestResult;
-	
+	//Coefficients used to calculate new positions.
 	private double intertiaCoefficient;
 	private double cognitiveCoefficient;
 	private double socialCoefficient;
+	
+	private double[] personalBestPricing;
+	private double personalBestResult;
 	
 	private double[] globalBestPricing;
 	private double globalBestResult;
@@ -156,6 +157,10 @@ public class Particle {
 		this.globalBestResult = result;
 	}
 	
+	/**
+	 * Updates the values of the inertia, cognitive and social coefficients	
+	 * @param updatedCoefficients The new values for the coefficients [inertia, cognitive, social].
+	 */
 	public void updateCoefficients(double[] updatedCoefficients) {
 		intertiaCoefficient = updatedCoefficients[0];
 		cognitiveCoefficient = updatedCoefficients[1];
