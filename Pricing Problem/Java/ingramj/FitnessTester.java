@@ -24,6 +24,7 @@ public class FitnessTester {
         //PricingProblem f = PricingProblem.randomInstance(20);
         System.out.println("\n*****CI-Pricing Problem...*****");
         System.out.println("Which mode would you like to run CI-Pricing Problem in? (Enter the number): ");
+        System.out.println("[0] Random Search");
         System.out.println("[1] Genetic Tests (allows multiple configs, runs, and prints result to file).");
         System.out.println("[2] PSO Tests (allows multiple configs, runs, and prints result to file).");
         System.out.println("[3] Comparison Tests (runs PSO and Genetic multiple times, and prints result to file).");
@@ -34,6 +35,9 @@ public class FitnessTester {
 		int numberOfGAAndPSOTests = 100; //Number of tests when just running the PSO or GA tests 
 		int secondsToRun = 10;
         switch(runningMode) {
+        	case 0:
+        		randomSearch(f, 20);
+        		break;
         	//Genetic algorithm tests
         	case 1:
         	{
