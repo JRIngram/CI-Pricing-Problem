@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"ingramj","l":"FitnessTester"},{"p":"ingramj.genetic","l":"Genetic"},{"p":"ingramj.particle","l":"Particle"},{"p":"ingramj.particle","l":"ParticleSwarm"},{"p":"ingramj","l":"PricingProblem"},{"p":"ingramj","l":"Tuple"}]
