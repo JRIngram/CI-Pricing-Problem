@@ -27,88 +27,18 @@ public class FitnessTester {
         //PricingProblem f = PricingProblem.randomInstance(20);
         System.out.println("\n*****CI-Pricing Problem...*****");
         System.out.println("Which mode would you like to run CI-Pricing Problem in? (Enter the number): ");
-        System.out.println("[1] Random Search for 100 iterations.");
-        System.out.println("[2] Genetic Search.");
-        System.out.println("[3] Particle Swarm Optimisation (PSO).");
-        System.out.println("[4] Genetic Tests (allows multiple configs, runs, and prints result to file).");
-        System.out.println("[5] PSO Tests (allows multiple configs, runs, and prints result to file).");
-        System.out.println("[6] Comparison Tests (runs PSO and Genetic multiple times, and prints result to file).");
-        System.out.println("[7] Exit.");
+        System.out.println("[1] Genetic Tests (allows multiple configs, runs, and prints result to file).");
+        System.out.println("[2] PSO Tests (allows multiple configs, runs, and prints result to file).");
+        System.out.println("[3] Comparison Tests (runs PSO and Genetic multiple times, and prints result to file).");
+        System.out.println("[4] Exit.");
         int runningMode = input.nextInt();
         input.nextLine();
         
 		int numberOfGAAndPSOTests = 100; //Number of tests when just running the PSO or GA tests 
 		int secondsToRun = 10;
         switch(runningMode) {
-        	case 1:
-        	{
-        		randomSearch(f,20);
-        		break;
-        	}
-        	case 2:
-        	{
-        		System.out.println("Genetic Algorithm selected.");
-        		System.out.print("Enter population size: ");
-        		int popSize = 100;
-        		try{
-            		popSize= input.nextInt();
-            		input.nextLine();
-        		}
-        		catch(Exception e) {
-        			System.out.println("Invalid input. Default population size of 100 used.");
-        			System.out.println(e.toString());
-        		}
-        		System.out.println("Would you like a percentage to inherit from the best parent (e.g. 60 = 60 percent change to inherit from best parent)? [Y/N]");
-            	String confirmBias = input.nextLine();
-            	confirmBias = confirmBias.toUpperCase();
-            	int biasRate = 50;
-            	if(confirmBias.equals("Y")) {
-            		System.out.print("Enter bias (as whole number, e.g. 60 for 60%): ");
-            		try {
-                		biasRate =  input.nextInt();
-                		input.nextLine();
-                		while(biasRate < 0 || biasRate > 100) {
-                			System.out.println("Please enter a valid bias rate (between 0 - 100)");
-                			biasRate =  input.nextInt(); 
-                    		input.nextLine();
-                		}
-                		System.out.println("Bias of " + biasRate + " selected.");
-            		}
-            		catch(Exception e) {
-            			System.out.println("Error on input, default bias of 50 chosen");
-            		}
-            	}
-            	else {
-            		System.out.println("No bias selected.");
-            	}
-            	System.out.println("How many seconds would you like the algorithm to run for?");
-            	int runTime = 10; //Default run time of 10 seconds
-        		try {
-            		runTime =  input.nextInt();
-            		input.nextLine();
-            		while(runTime <= 0) {
-            			System.out.println("Please enter a valid run time of more than 0.");
-                		runTime =  input.nextInt();
-                		input.nextLine();
-            		}
-            		System.out.println("Run time of " + runTime + " selected.");
-        		}
-        		catch(Exception e) {
-        			runTime = 10;
-        			System.out.println("Error on input, default run time of " + runTime + " selected.");
-        		}
-            	System.out.print("Running Genetic Algorithm");
-                Genetic gen = new Genetic(f, 20, popSize, biasRate);
-                gen.timeRestrainedGeneticSearch(runTime);
-        		break;
-        	}
-        	case 3:
-        	{
-        		//pso
-        		break;
-        	}
         	//Genetic algorithm tests
-        	case 4:
+        	case 1:
         	{
         		System.out.println("Genetic Tests selected...");
         		System.out.println("This will run a series of tests for genetic algorithms.");
@@ -127,7 +57,7 @@ public class FitnessTester {
         		System.out.println("\t* A run of 10 seconds, with a 40:60 bias (worstParent:bestParent), population of 500");
         		System.out.println("\t* A run of 10 seconds, with no bias to either parent, population of 500");
         		System.out.println("This will take approximately " + (12 * (secondsToRun * numberOfGAAndPSOTests)) + " seconds to run.");
-        		System.out.println("Press any key to begin...");
+        		System.out.println("Press [ENTER] to begin...");
         		input.nextLine();
         		
         		//Result arrays for populations of 50
@@ -200,7 +130,7 @@ public class FitnessTester {
         		break;
         	}
         	//PSO Tests
-        	case 5:
+        	case 2:
         	{
         		System.out.println("PSO Tests Selected...");
         		System.out.println("This will run a series of tests for particle swarm optimisation algorithms.");
@@ -233,7 +163,7 @@ public class FitnessTester {
         		System.out.println("\t* A run of 10 seconds, with an 'adaptive coeefficent'. This begins initially with a higher cognitive coefficient and then changes for a higher social coefficient, population of 500");
         		System.out.println("\t* A run of 10 seconds, with an 'adaptive coeefficent'. This begins initially with a higher social coefficient and then changes for a higher cognitive coefficient, population of 500");
         		System.out.println("This will take approximately " + (20 * (secondsToRun * numberOfGAAndPSOTests)) + " seconds to run.");
-        		System.out.println("Press any key to begin...");
+        		System.out.println("Press [ENTER] to begin...");
         		input.nextLine();
         		
         		double[] coefficients = {(1 / (2 * Math.log(2))), (0.5 + Math.log(2)), (0.5 + Math.log(2))};
@@ -331,7 +261,7 @@ public class FitnessTester {
         		break;
         	}
     		//Comparisons
-        	case 6:
+        	case 3:
         	{
         		int numberOfComparisonTests = 1000; //Number of tests ran per algorithm when running comparison tests.
         		System.out.println("Comparison Tests Select...");
@@ -340,7 +270,7 @@ public class FitnessTester {
         				"\t* A particle swarm optimisation with adaptive coefficients. The initial bias is attraction to the swarm's best, and then swaps to personal best, with a swarm size of 500");
         		System.out.println("Each test will run for 10 seconds 1000 times.");
         		System.out.println("This will take approximately " + (20 * (secondsToRun * numberOfComparisonTests)) + " seconds to run.");
-				System.out.println("Press any key to begin...");
+				System.out.println("Press [ENTER] to begin...");
         		input.nextLine();
         		double[] coefficients = {(1 / (2 * Math.log(2))), (0.5 + Math.log(2)), (0.5 + Math.log(2))};
         		Tuple<double[], Double>[] gaResults = new Tuple[numberOfComparisonTests];
@@ -388,7 +318,7 @@ public class FitnessTester {
         		
         		break;
         	}
-        	case 7:
+        	case 4:
         		System.exit(0);
         		break;
         }
