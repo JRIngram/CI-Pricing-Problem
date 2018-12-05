@@ -15,24 +15,26 @@ public class ParticleSwarm {
 	
 	/**
 	 * Creates a particle swarm of a user-defined size
-	 * @param array The array to solve the problem for
-	 * @param antennaNumber The number of antennae
+	 * @param problem The pricing problem instance
+	 * @param numberOfGoods The number of goods in the pricing problem.
 	 * @param coefficients The coefficients for calculating the particle's new positions.
 	 * @param size The size of the particle swarms
 	 * @param adaptiveSetting Sets which adaptive mode will be used. 0: coefficients are equal; 1: bias to exploration; 2: initial bias to exploitation; 3: initial bias to exploration then bias switches to exploitation; 4: initial bias to exploitation then bias switches to exploration. 
 	 */
 	public ParticleSwarm(PricingProblem problem, int numberOfGoods, double[] coefficients, int size, int adaptiveSetting) {
-		//Settings the adaptivity setting to default if not a valid value.
+		//Sets the adaptivity setting to default if not a valid value.
 		if(adaptiveSetting < 0 || adaptiveSetting > 4) {
 			adaptiveSetting = 0;
 		}
 		this.adaptiveSetting = adaptiveSetting;
 		this.coefficients = Arrays.copyOf(coefficients, coefficients.length);
 		if(adaptiveSetting != 0) {
+			//Updates coefficients to have a bias to exploration/cognitive bias
 			if(adaptiveSetting == 1 || adaptiveSetting == 3){
 				this.coefficients[1] = this.coefficients[1] * 1.1;
 				this.coefficients[2] = this.coefficients[2] * 0.9;
 			}
+			//Updates coefficients to have a bias to exploitation/social bias
 			else if(adaptiveSetting == 2 || adaptiveSetting == 4){
 				this.coefficients[1] = this.coefficients[1] * 0.9;
 				this.coefficients[2] = this.coefficients[2] * 1.1;
@@ -71,9 +73,9 @@ public class ParticleSwarm {
 	}
 	
 	/**
-	 * Causes the particles to search the state space to find the best position
-	 * @param numberOfSearches
-	 * @return
+	 * Causes the particles to search the state space to find the best position for a certain number of iterations
+	 * @param numberOfSearches The number of iterations before termination
+	 * @return The best result found.
 	 */
 	public Tuple<double[], Double> searchSpace(int numberOfSearches){
 		for(int i = 0; i < numberOfSearches; i++) {			
@@ -112,9 +114,9 @@ public class ParticleSwarm {
 	}
 	
 	/**
-	 * Causes the particles to search the state space to find the best position
-	 * @param numberOfSearches
-	 * @return
+	 * Causes the particles to search the state space to find the best position for a certain length of time.
+	 * @param timeRestraint Number of seconds to run the algorithm for before termination.
+	 * @return The best result found
 	 */
 	public Tuple<double[], Double> searchSpaceTimeRestrained(int timeRestraint){
 		long start = System.currentTimeMillis();

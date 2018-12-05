@@ -21,6 +21,12 @@ public class Particle {
 	
 	private PricingProblem problem;
 	
+	/**
+	 * Creates a particle and sets its initial position and velocity.
+	 * @param numberOfGoods The number of goods in the pricing problem
+	 * @param problem The pricing problem
+	 * @param coefficients The coefficients used to calculate future positions of the particle.
+	 */
 	public Particle(int numberOfGoods, PricingProblem problem, double[] coefficients){
 		this.problem = problem;
 		
@@ -41,8 +47,8 @@ public class Particle {
 		personalBestPricing = Arrays.copyOf(position, position.length);
 		personalBestResult = problem.evaluate(personalBestPricing);
 		
+		//Calculate initial velocity
 		velocity = new double[position.length];
-		
 		//Creation of a second position to calculate initial velocity.
 		double[] secondPosition = new double[numberOfGoods];
 	    for (int i = 0; i < numberOfGoods; i++) {
