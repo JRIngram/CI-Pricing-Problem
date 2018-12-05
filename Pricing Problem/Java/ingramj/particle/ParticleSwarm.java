@@ -5,6 +5,11 @@ import ingramj.PricingProblem;
 import ingramj.Tuple;
 import ingramj.particle.Particle;
 
+/**
+ * An implementation of Particle Swarm Optimisation for the Pricing Problem
+ * @author ingramj
+ *
+ */
 public class ParticleSwarm {
 	private Particle[] swarm;
 	private double[] globalBestPricing;

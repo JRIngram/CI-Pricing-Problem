@@ -4,6 +4,10 @@ import ingramj.PricingProblem;
 import java.util.Random;
 import java.util.Arrays;
 
+/**
+ * A particle for use in Particle Swarm Optimisation
+ * @author ingramj
+ */
 public class Particle {
 	private double[] velocity;
 	private double[] position;

@@ -7,6 +7,11 @@ import java.util.Random;
 import ingramj.PricingProblem;
 import ingramj.Tuple;
 
+/**
+ * An implementation of a genetic algorithm for the Pricing Problem
+ * @author ingramj
+ *
+ */
 public class Genetic {
 	
 	private PricingProblem problem;

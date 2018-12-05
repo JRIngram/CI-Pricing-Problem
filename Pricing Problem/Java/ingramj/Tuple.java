@@ -2,7 +2,7 @@ package ingramj;
 
 /**
  * A class which represents a Tuple datatype.
- * @author JRIngram
+ * @author ingramj
  * @param <T> A generic data type.
  * @param <E> A generic data type.
  */
