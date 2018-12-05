@@ -6,7 +6,6 @@ import java.util.Random;
 import java.util.Scanner;
 
 import ingramj.genetic.Genetic;
-import ingramj.genetic.Tuple;
 import ingramj.particle.ParticleSwarm;
 
 /**
@@ -17,7 +16,6 @@ public class FitnessTester {
     public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
         System.out.println("Starting CI-Pricing Problem...");
         int numberOfGoods = 20;
-        Random rng = new Random(0);
         Scanner input = new Scanner(System.in);
         // We are allowed to assume that prices may be anything from 1p to �10 per item.
         
@@ -324,6 +322,11 @@ public class FitnessTester {
         
     }
     
+    /**
+     * Performs a random search of the pricing problem space
+     * @param f The pricing problem
+     * @param numberOfGoods The number of goods in the pricing problem.
+     */
     public static void randomSearch(PricingProblem f, int numberOfGoods){
         Random rng = new Random(0);
         double[] prices = new double[numberOfGoods];
