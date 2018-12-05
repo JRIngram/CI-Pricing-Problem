@@ -10,7 +10,6 @@ import ingramj.genetic.Tuple;
 import ingramj.particle.ParticleSwarm;
 
 /**
- *
  * @author pete
  */
 public class FitnessTester {

@@ -1,4 +1,4 @@
-package ingramj.genetic;
+package ingramj;
 
 /**
  * A class which represents a Tuple datatype.

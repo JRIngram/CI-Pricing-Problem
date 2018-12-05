@@ -2,7 +2,7 @@ package ingramj.particle;
 
 import java.util.Arrays;
 import ingramj.PricingProblem;
-import ingramj.genetic.Tuple;
+import ingramj.Tuple;
 import ingramj.particle.Particle;
 
 public class ParticleSwarm {

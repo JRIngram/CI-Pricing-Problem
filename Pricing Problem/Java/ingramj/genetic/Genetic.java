@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 import ingramj.PricingProblem;
+import ingramj.Tuple;
 
 public class Genetic {
 	
@@ -13,6 +14,13 @@ public class Genetic {
 	private int numberOfGoods;
 	private int biasToBest;
 	
+	/**
+	 * Creates a genetic algorithm population with specific configurations
+	 * @param problem The pricing problem
+	 * @param numberOfGoods The number of goods in the pricing problem
+	 * @param populationSize The size of the population for the genetic algorithm.
+	 * @param biasToBest The bias to inherit from the best parent. Set to 50 for no bias to either parent.
+	 */
 	public Genetic(PricingProblem problem, int numberOfGoods, int populationSize, int biasToBest) {
 		this.problem = problem;
 		this.numberOfGoods = numberOfGoods;
@@ -20,6 +28,11 @@ public class Genetic {
 		this.biasToBest = biasToBest;
 	}
 	
+	/**
+	 * Performs a search using a genetic algorithm for a specified number of iterations.
+	 * @param timeRestraint The number of iterations to run the search for before termination.
+	 * @return The best solution.
+	 */
 	public Tuple<double[], Double> geneticSearch(int generationLimit){
 		for(int i = 0; i < generationLimit; i++) {
 			Tuple<double[], Double>[] parents = parentSelection(population);
@@ -33,6 +46,11 @@ public class Genetic {
 		return population[0];
 	}
 	
+	/**
+	 * Performs a search using a genetic algorithm for a specified number of seconds
+	 * @param timeRestraint The number of seconds to run the search for before termination.
+	 * @return The best solution.
+	 */
 	public Tuple<double[], Double> timeRestrainedGeneticSearch(int timeRestraint){
 		long start = System.currentTimeMillis();
 		long now = System.currentTimeMillis();
@@ -102,6 +120,11 @@ public class Genetic {
 		return population;
 	}
 	
+	/**
+	 * Creates a new generation by performing crossover and mutation.
+	 * @param parents The parents from the previous generation.
+	 * @return An array of solutions to use as the next generation.
+	 */
 	private Tuple[] createNextGeneration(Tuple<double[], Double>[] parents){
 		ArrayList<Tuple<double[],Double>> newGeneration = new ArrayList<Tuple<double[],Double>>();
 		Tuple[] nextGeneration = new Tuple[population.length];
@@ -128,7 +151,7 @@ public class Genetic {
 	/**
 	 * Chooses the parents for the next generation, based on a 2k tournament search
 	 * @param population Current population to pick parents from.
-	 * @return
+	 * @return An array of parent solutions.
 	 */
 	private Tuple[] parentSelection(Tuple<double[], Double>[] population) {
 		Tuple<double[], Double>[] parents = new Tuple[population.length / 2];
@@ -152,6 +175,12 @@ public class Genetic {
 		return parents;
 	}
 	
+	/**
+	 * Performs uniform crossover between two parents, randomly selecting genotypes from a parent for each genotype, with some biases if set.
+	 * @param parentOne 
+	 * @param parentTwo
+	 * @return The two new children.
+	 */
 	private Tuple<double[],Double>[] breed(Tuple<double[], Double> parentOne, Tuple<double[],Double> parentTwo){
 		Tuple<double[], Double> childOne = new Tuple<double[], Double>(new double[numberOfGoods], 0.0);
 		Tuple<double[], Double> childTwo = new Tuple<double[], Double>(new double[numberOfGoods], 0.0);
@@ -225,18 +254,24 @@ public class Genetic {
 				}
 			}
 		}
-		childOne = mutate(childOne, 0.7);
-		childTwo = mutate(childTwo, 0.7);
+		childOne = mutate(childOne, 0.3);
+		childTwo = mutate(childTwo, 0.3);
 		childOne.setItemTwo(problem.evaluate(childOne.getItemOne()));
 		childTwo.setItemTwo(problem.evaluate(childTwo.getItemOne()));
 		Tuple[] children = {childOne, childTwo};
 		return children;
 	}
 	
+	/**
+	 * Mutates a child by adding the result of Random.nextGaussian() to each genotype within the child.
+	 * @param child The child to mutate
+	 * @param mutationProbability The probability of the child mutating
+	 * @return The mutated child and its revenue.
+	 */
 	private Tuple<double[], Double> mutate(Tuple<double[], Double> child, double mutationProbability){
 		Random rng = new Random();
 		double[] mutatedPrice = new double[numberOfGoods];
-		if(rng.nextDouble() > mutationProbability){
+		if(rng.nextDouble() < mutationProbability){
 			//If child chosen to mutate, all prices in the list will slightly mutate by adding the result of nextGaussian to each index
 			//This ensures that although each item in the price list mutates, it will only slightly mutate.
 			for(int i = 0; i < numberOfGoods; i++){
