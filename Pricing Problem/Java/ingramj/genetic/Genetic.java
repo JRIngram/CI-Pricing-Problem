@@ -86,7 +86,7 @@ public class Genetic {
 	/**
 	 * Generates a population for use in the genetic algorithm.
 	 * @param populationSize The size of the desired population
-	 * @return A tuple array containing a population of routes.
+	 * @return A tuple array containing a population of prices.
 	 */
 	private Tuple<double[], Double>[] createPopulation(int populationSize,  int numberOfGoods){
 		Random rng = new Random();
